@@ -31,7 +31,8 @@ const userShcema = new Schema({
     },
     role: {
         type: String,
-        require: true
+        require: true,
+        enum: [`admin`, `broker`, `use`]
     },
     phone_number: {
         type: String,
