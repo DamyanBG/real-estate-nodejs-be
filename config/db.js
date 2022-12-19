@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const databasename = "realEstateApp";
 const conectionString = `mongodb://localhost:27017/${databasename}`;
 
