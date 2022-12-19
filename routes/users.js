@@ -36,13 +36,45 @@ router.delete("/:id", async(req,res) => {
             
             const user = await User.findByIdAndDelete(req.body.userId);
             res.status(200).json("Account has been deleted");
-            
+
         } catch (err) {
             return res.status(500).json(err);
         }
         
     }else{
         return res.status(401).json("You can delete only your account");
+    }
+});
+
+//Get user 
+
+router.get("/:id", async (req,res) => {
+    try {
+        const user = await User.findById(req.body.userId);
+        const {password, updatedAt, ...other} = user._doc;
+        res.status(200).json(other);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+});
+
+//Create user 
+
+router.post("/", async(req, res) => {
+
+    const user = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        role: req.body.role,
+        phone_number: req.body.phone_number,
+    }
+
+    try {
+        const newUser = await new User(user);
+        res.status(201).json(newUser);
+    } catch (er) {
+        return res.status(500).json(err);
     }
 });
 
