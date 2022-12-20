@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 
 const databasename = "realEstateApp";
-const conectionString = `mongodb://localhost:27017/${databasename}`;
+const databaseUrl = "127.0.0.1:27017"
+const connectionString = `mongodb://${databaseUrl}/${databasename}`;
 
-module.exports = async (app) => {
+module.exports = async () => {
   try {
-    await mongoose.connect(conectionString, {
+    await mongoose.connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
 
-    console.log("Database is conteting");
+    console.log("Database is connecting");
 
     mongoose.connection.on(`error`, (err) => {
       console.error(`Database error`);
@@ -18,7 +19,7 @@ module.exports = async (app) => {
     });
   } catch (err) {
     console.log(err);
-    console.error(`Error connetion on database`);
+    console.error(`Error during connection to the database`);
     process.exit(1);
   }
 };

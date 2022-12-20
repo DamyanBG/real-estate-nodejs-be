@@ -1,8 +1,8 @@
 const { model, Schema, Types: {ObjectId}} = require("mongoose");
 
-const EMAIL_PATERM = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
+const EMAIL_REGEX = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
 
-const userShcema = new Schema({
+const userSchema = new Schema({
     first_name: {
         type: String,
         required: true,
@@ -20,7 +20,7 @@ const userShcema = new Schema({
         require: true,
         validate: {
             validator(value){
-                return EMAIL_PATERM.test(value);
+                return EMAIL_REGEX.test(value);
             },
             message: `Email must be valid!!`
         },
@@ -32,7 +32,7 @@ const userShcema = new Schema({
     role: {
         type: String,
         require: true,
-        enum: [`admin`, `broker`, `use`]
+        enum: [`admin`, `broker`, `user`]
     },
     phone_number: {
         type: String,
@@ -40,7 +40,7 @@ const userShcema = new Schema({
     }
 });
 
-userShcema.index({email: 1}, {
+userSchema.index({email: 1}, {
     unique: true,
     collation: {
         locale: `en`,
@@ -48,5 +48,5 @@ userShcema.index({email: 1}, {
     }
 })
 
-const User = model("User", userShcema);
+const User = model("User", userSchema);
 module.exports = User;
