@@ -1,11 +1,23 @@
 const router = require("express").Router();
+const { isValidObjectId } = require("mongoose");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
 //Get user
 router.get("/", async (req, res) => {
+  const userId = req.body.user_id;
+  if(!isValidObjectId(userId))
+  { 
+    res.status(400).send("Invalid params");
+    return;
+  }
   try {
-    const user = await User.findById(req.body.user_id);
+    const user = await User.findById(userId);
+    if(!user)
+    { 
+      res.status(404).send("User with this id do not exists");
+      return;
+    }
     const { password, updatedAt, ...other } = user._doc;
     res.status(200).json(other);
   } catch (err) {
