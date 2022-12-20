@@ -48,16 +48,6 @@ router.delete("/", async (req, res) => {
 
 //Update
 router.put("/", async (req, res) => {
- 
-    if (req.body.password) {
-      try {
-        const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(req.body.password, salt);
-      } catch (err) {
-        return res.status(500).json(err);
-      }
-    }
-
     try {
       const user = await User.findByIdAndUpdate(req.body.user_id, {
         $set: req.body,
