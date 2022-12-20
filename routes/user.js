@@ -14,7 +14,6 @@ router.get("/", async (req, res) => {
 });
 
 //Create user
-
 router.post("/", async (req, res) => {
   const user = {
     first_name: req.body.first_name,
@@ -35,9 +34,7 @@ router.post("/", async (req, res) => {
 });
 
 //Delete user
-
 router.delete("/", async (req, res) => {
-  // || req.body.role.admin --> add later
   try {
     const user = await User.findByIdAndDelete(req.body.user_id);
     res.status(200).json("Account has been deleted");
