@@ -71,6 +71,7 @@ router.put("/", async (req, res) => {
       user.save();
       return res.status(200).json("Account has been updated");
     } catch (err) {
+      console.log(err);
       console.error(err.message);
       const errors = mapErrors(err);
       res.status(400).json({ message: errors });
