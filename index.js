@@ -5,19 +5,21 @@ const usersRoute = require("./routes/users");
 const userRoute = require("./routes/user");
 const homesRoute = require("./routes/homes");
 const homeRoute = require("./routes/home");
+const homePhotosRoute = require("./routes/homePhotos");
 
 start();
 
-async function start(){
-    const app = express();
-    await databaseConfig(app);
-    expressConfig(app);
+async function start() {
+  const app = express();
+  await databaseConfig(app);
+  expressConfig(app);
 
-    app.use("/users", usersRoute);
-    app.use("/user", userRoute);
-    app.use("/homes", homesRoute);
-    app.use("/home", homeRoute);
+  app.use("/users", usersRoute);
+  app.use("/user", userRoute);
+  app.use("/homes", homesRoute);
+  app.use("/home", homeRoute);
+  app.use("/home-photos", homePhotosRoute);
 
-    const PORT = process.env.PORT || 3030;
-    app.listen(PORT, ()=> console.log(`Server listen on port 3030`));
+  const PORT = process.env.PORT || 3030;
+  app.listen(PORT, () => console.log(`Server listen on port 3030`));
 }
