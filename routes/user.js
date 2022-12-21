@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { isValidObjectId } = require("mongoose");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const mapErrors = require("../util/mapers");
 
 //Get user
 router.get("/", async (req, res) => {
@@ -21,7 +22,9 @@ router.get("/", async (req, res) => {
     const { password, updatedAt, ...other } = user._doc;
     res.status(200).json(other);
   } catch (err) {
-    return res.status(500).json(err);
+      console.error(err.message);
+      const errors = mapErrors(err);
+      res.status(400).json({ message: errors });
   }
 });
 
@@ -41,7 +44,9 @@ router.post("/", async (req, res) => {
     await newUser.save();
     return res.status(201).json(newUser);
   } catch (err) {
-    return res.status(500).json(err);
+      console.error(err.message);
+      const errors = mapErrors(err);
+      res.status(400).json({ message: errors });
   }
 });
 
@@ -51,7 +56,9 @@ router.delete("/", async (req, res) => {
     const user = await User.findByIdAndDelete(req.body.user_id);
     res.status(200).json("Account has been deleted");
   } catch (err) {
-    return res.status(500).json(err);
+      console.error(err.message);
+      const errors = mapErrors(err);
+      res.status(400).json({ message: errors });
   }
 });
 
@@ -64,7 +71,9 @@ router.put("/", async (req, res) => {
       user.save();
       return res.status(200).json("Account has been updated");
     } catch (err) {
-      return res.status(500).json(err);
+      console.error(err.message);
+      const errors = mapErrors(err);
+      res.status(400).json({ message: errors });
     }
 });
 
