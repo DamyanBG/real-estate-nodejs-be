@@ -25,7 +25,7 @@ const userSchema = new Schema({
             message: `Email must be valid!!`
         },
     },
-    hashedPassword: {
+    password: {
         type: String,
         require: true
     },

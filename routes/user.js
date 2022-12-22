@@ -48,11 +48,16 @@ router.post(
     .isAlphanumeric()
     .withMessage(`Password may content only letter and number`),
   async (req, res) => {
+
+    const salt = await bcrypt.genSalt();
+    
+    const passwordHash = await bcrypt.hash(req.body.password,salt);
+
     const user = {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      hashedPassword: req.body.password,
+      hashedPassword: passwordHash,
       role: req.body.role,
       phone_number: req.body.phone_number,
     };
