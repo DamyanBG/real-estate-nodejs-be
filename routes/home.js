@@ -7,7 +7,6 @@ const {
   updateHome,
 } = require("../services/homeService");
 const { body, validationResult } = require("express-validator");
-const mapErrors = require("../util/mapers");
 
 //Create home
 router.post(
