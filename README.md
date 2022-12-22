@@ -5,4 +5,6 @@ You can start the project on local with few easy steps:
 
 - you have to clone the repository
 - you have to write on the terminal "npm install" (you need to have Node installed on your system)
-- start the back end "npm start"
+- create .env file
+- add AZURE_DATABASE_CONNECTION_STRING variable to the .env file and assign connection string to your local database or whatever you want
+- start the back end "npm run dev"

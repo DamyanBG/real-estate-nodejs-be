@@ -4,15 +4,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 const mongoose = require("mongoose");
 
-const databasename = "realEstateApp";
-const azureConnectionString = process.env.AZURE_DATABASE_CONNECTION_STRING
-const databaseUrl = "127.0.0.1:27017"
-const connectionString = `mongodb://${databaseUrl}/${databasename}`;
+const connectionString = process.env.AZURE_DATABASE_CONNECTION_STRING
 
 module.exports = async () => {
   try {
     console.log("Database is connecting");
-    await mongoose.connect(azureConnectionString, {
+    await mongoose.connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
