@@ -5,7 +5,7 @@ const EMAIL_REGEX = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
 const userSchema = new Schema({
     first_name: {
         type: String,
-        required: true,
+        require: true,
         min: 3,
         max: 10
     },
@@ -27,7 +27,7 @@ const userSchema = new Schema({
     },
     hashedPassword: {
         type: String,
-        required: true
+        require: true
     },
     role: {
         type: String,
