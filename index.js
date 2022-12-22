@@ -7,6 +7,7 @@ const homesRoute = require("./routes/homes");
 const homeRoute = require("./routes/home");
 const homePhotosRoute = require("./routes/homePhotos");
 const worksRoute = require("./routes/works")
+const landRoute = require("./routes/land")
 
 start();
 
@@ -21,6 +22,7 @@ async function start() {
   app.use("/home", homeRoute);
   app.use("/home-photos", homePhotosRoute);
   app.use("/works", worksRoute)
+  app.use("/land", landRoute)
 
   const PORT = process.env.PORT || 3030;
   app.listen(PORT, () => console.log(`Server listen on port 3030`));

@@ -7,13 +7,13 @@ const userSchema = new Schema({
         type: String,
         require: true,
         min: 3,
-        max: 10
+        max: 50
     },
     last_name: {
         type: String,
         require: true,
         min: 3,
-        max: 10
+        max: 50
     },
     email: {
         type: String,

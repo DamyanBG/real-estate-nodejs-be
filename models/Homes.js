@@ -5,13 +5,13 @@ const homesSchema = new Schema({
         type: String,
         required: true,
         min: 3,
-        max: 10
+        max: 100
     },
     place: {
         type: String,
         required: true,
         min: 3,
-        max: 12
+        max: 100
     },
     price: {
         type: Number,
@@ -29,7 +29,7 @@ const homesSchema = new Schema({
         type: String,
         required: true,
         min:5,
-        max: 50
+        max: 150
     },
     owner: {
         type: ObjectId,
