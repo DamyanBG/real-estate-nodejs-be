@@ -2,84 +2,147 @@ const router = require("express").Router();
 const { isValidObjectId } = require("mongoose");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const mapErrors = require("../util/mapers");
+const { body, validationResult } = require("express-validator");
+const { updateUser } = require("../services/userService");
 
 //Get user
 router.get("/", async (req, res) => {
   const userId = req.body.user_id;
-  if(!isValidObjectId(userId))
-  { 
+  if (!isValidObjectId(userId)) {
     res.status(400).send("Invalid params");
     return;
   }
   try {
     const user = await User.findById(userId);
-    if(!user)
-    { 
+    if (!user) {
       res.status(404).send("User with this id do not exists");
       return;
     }
-    const { password, updatedAt, ...other } = user._doc;
+    const { password, ...other } = user._doc;
     res.status(200).json(other);
   } catch (err) {
-    return res.status(500).json(err);
+    console.error(err.message);
+    const errors = mapErrors(err);
+    res.status(400).json({ message: errors });
   }
 });
 
 //Create user
-router.post("/", async (req, res) => {
-  const user = {
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    hashedPassword: req.body.hashedPassword,
-    role: req.body.role,
-    phone_number: req.body.phone_number,
-  };
+router.post(
+  "/",
+  body("email").isEmail().withMessage("Email must be valid"),
+  body("first_name")
+    .isLength({ min: 3 })
+    .withMessage("First name must be at least 3 charaters long")
+    .isLength({ max: 10 })
+    .withMessage("First name must be less 10 charaters long"),
+  body("last_name")
+    .isLength({ min: 3 })
+    .withMessage("Last name must be at least 3 charaters long")
+    .isLength({ max: 10 })
+    .withMessage("Last name must be less 10 charaters long"),
+  body("hashedPassword")
+    .isLength({ min: 5 })
+    .withMessage(`Password must be at least 5 character long`)
+    .isAlphanumeric()
+    .withMessage(`Password may content only letter and number`),
+  async (req, res) => {
+    const user = {
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      hashedPassword: req.body.hashedPassword,
+      role: req.body.role,
+      phone_number: req.body.phone_number,
+    };
 
-  try {
-    const newUser = new User(user);
-    await newUser.save();
-    return res.status(201).json(newUser);
-  } catch (err) {
-    return res.status(500).json(err);
+    try {
+      const { errors } = validationResult(req);
+      if (errors.length > 0) {
+        throw errors;
+      }
+
+      const newUser = new User(user);
+      await newUser.save();
+      return res.status(201).json(newUser);
+    } catch (err) {
+      console.error(err.message);
+      const errors = mapErrors(err);
+      res.status(400).json({ message: errors });
+    }
   }
-});
+);
 
 //Delete user
 router.delete("/", async (req, res) => {
-  const {user_id} = req.body
-  try {
-    const user = await User.findById(user_id);
+  const { user_id } = req.body;
 
-    if(!user) {
-      res.status(400).json("User with this id do not exists.")
-      return
-    }
+  const user = await User.findById(user_id);
 
-    const deleteUser = await User.deleteOne(user)
-
-    if(!deleteUser) {
-      res.status(400).json("something went wrong, user was not deleted")
-      return
-    }
-    
-    res.status(200).json("Account has been deleted");
-  } catch (err) {
-    return res.status(500).json(err);
+  if (!user) {
+    res.status(400).json("User with this id do not exists.");
+    return;
   }
+
+  const deleteUser = await User.deleteOne(user);
+
+  if (!deleteUser) {
+    res.status(400).json("something went wrong, user was not deleted");
+    return;
+  }
+
+  res.status(200).json("Account has been deleted");
 });
 
 //Update
-router.put("/", async (req, res) => {
-    try {
-      const user = await User.findByIdAndUpdate(req.body.user_id, {
-        $set: req.body,
-      });
-      user.save();
-      return res.status(200).json("Account has been updated");
-    } catch (err) {
-      return res.status(500).json(err);
+router.put(
+  "/",
+  body("email").isEmail().withMessage("Email must be valid"),
+  body("first_name")
+    .isLength({ min: 3 })
+    .withMessage("First name must be at least 3 charaters long")
+    .isLength({ max: 10 })
+    .withMessage("First name must be less 10 charaters long"),
+  body("last_name")
+    .isLength({ min: 3 })
+    .withMessage("Last name must be at least 3 charaters long")
+    .isLength({ max: 10 })
+    .withMessage("Last name must be less 10 charaters long"),
+  body("hashedPassword")
+    .isLength({ min: 5 })
+    .withMessage(`Password must be at least 5 character long`)
+    .isAlphanumeric()
+    .withMessage(`Password may content only letter and number`),
+  async (req, res) => {
+    const userId = req.body.user_id;
+    if (!isValidObjectId(userId)) {
+      res.status(400).json("Invalid user id!");
+      return;
     }
-});
+    const user = {
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      hashedPassword: req.body.hashedPassword,
+      role: req.body.role,
+      phone_number: req.body.phone_number,
+    };
+
+    try {
+      const { errors } = validationResult(req);
+      if (errors.length > 0) {
+        throw errors;
+      }
+
+      const currentUser = await updateUser(userId, user);
+      return res.status(200).json(currentUser);
+    } catch (err) {
+      console.error(err.message);
+      const errors = mapErrors(err);
+      res.status(400).json({ message: errors });
+    }
+  }
+);
 
 module.exports = router;
