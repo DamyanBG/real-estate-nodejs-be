@@ -8,3 +8,5 @@ You can start the project on local with few easy steps:
 - create .env file
 - add AZURE_DATABASE_CONNECTION_STRING variable to the .env file and assign connection string to your local database or whatever you want
 - start the back end "npm run dev"
+
+You can find the front-end repository on https://github.com/DamyanBG/real-estate-react-app
