@@ -47,8 +47,22 @@ router.post("/", async (req, res) => {
 
 //Delete user
 router.delete("/", async (req, res) => {
+  const {user_id} = req.body
   try {
-    const user = await User.findByIdAndDelete(req.body.user_id);
+    const user = await User.findById(user_id);
+
+    if(!user) {
+      res.status(400).json("User with this id do not exists.")
+      return
+    }
+
+    const deleteUser = await User.deleteOne(user)
+
+    if(!deleteUser) {
+      res.status(400).json("something went wrong, user was not deleted")
+      return
+    }
+    
     res.status(200).json("Account has been deleted");
   } catch (err) {
     return res.status(500).json(err);
