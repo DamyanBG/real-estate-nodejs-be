@@ -15,17 +15,17 @@ router.post(
   body("name")
     .isLength({ min: 3 })
     .withMessage("Property name must be at least 3 charaters long")
-    .isLength({ max: 10 })
+    .isLength({ max: 100 })
     .withMessage("Property name must be less 10 charaters long"),
   body("place")
     .isLength({ min: 3 })
     .withMessage("Place name must be at least 3 charaters long")
-    .isLength({ max: 12 })
+    .isLength({ max: 100 })
     .withMessage("Place name must be less 12 charaters long"),
   body("description")
     .isLength({ min: 5 })
     .withMessage(`Description must be at least 5 character long`)
-    .isLength({ max: 50 })
+    .isLength({ max: 100 })
     .withMessage(`Description must less 50 character long`),
   async (req, res) => {
     const home = {
@@ -47,8 +47,8 @@ router.post(
       return res.status(201).json(newHome);
     } catch (err) {
       console.error(err.message);
-      const errors = mapErrors(err);
-      res.status(400).json({ message: errors });
+      console.log(err)
+      res.status(400).json({ error: err });
     }
   }
 );

@@ -35,14 +35,14 @@ router.post(
   body("first_name")
     .isLength({ min: 3 })
     .withMessage("First name must be at least 3 charaters long")
-    .isLength({ max: 10 })
+    .isLength({ max: 50 })
     .withMessage("First name must be less 10 charaters long"),
   body("last_name")
     .isLength({ min: 3 })
     .withMessage("Last name must be at least 3 charaters long")
-    .isLength({ max: 10 })
+    .isLength({ max: 50 })
     .withMessage("Last name must be less 10 charaters long"),
-  body("hashedPassword")
+  body("password")
     .isLength({ min: 5 })
     .withMessage(`Password must be at least 5 character long`)
     .isAlphanumeric()
@@ -52,7 +52,7 @@ router.post(
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      hashedPassword: req.body.hashedPassword,
+      hashedPassword: req.body.password,
       role: req.body.role,
       phone_number: req.body.phone_number,
     };
@@ -68,8 +68,7 @@ router.post(
       return res.status(201).json(newUser);
     } catch (err) {
       console.error(err.message);
-      const errors = mapErrors(err);
-      res.status(400).json({ message: errors });
+      res.status(400).json({ error: err });
     }
   }
 );
@@ -124,7 +123,7 @@ router.put(
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      hashedPassword: req.body.hashedPassword,
+      hashedPassword: req.body.password,
       role: req.body.role,
       phone_number: req.body.phone_number,
     };
@@ -139,8 +138,7 @@ router.put(
       return res.status(200).json(currentUser);
     } catch (err) {
       console.error(err.message);
-      const errors = mapErrors(err);
-      res.status(400).json({ message: errors });
+      res.status(400).json({ error: err });
     }
   }
 );
