@@ -36,6 +36,10 @@ const homesSchema = new Schema({
         ref: "User",
         require: true
     },
+    views: {
+        type: Number,
+        default: 0
+    },
 });
 
 const Homes = model("Homes", homesSchema);

@@ -14,6 +14,37 @@ async function updateUser(userId, user) {
     return existing;
 }
 
+async function createUser(first_name, last_name, email, password, role, phone_number) {
+
+    const existing = await getUserByEmail(email);
+
+    if (existing) {
+        throw new Error(`Email is taken`);
+    }
+
+    const hashedPassword = await hash(password, 10);
+
+    const user = new User({
+        first_name,
+        last_name,
+        email,
+        hashedPassword,
+        role,
+        phone_number
+    })
+
+    await user.save();
+
+    return user;
+
+}
+
+async function getUserByEmail(email) {
+    const user = await User.findOne({ email: new RegExp(`^${email}$`, `i`) });
+    return user;
+}
+
 module.exports = {
-    updateUser
+    updateUser,
+    createUser
 }

@@ -61,10 +61,12 @@ router.get("/", async (req, res) => {
   }
 
   const home = await getHomeById(req.body.home_id);
+  
   if (!home) {
     res.status(404).send("Home with this id do not exists");
     return;
   }
+  
   res.status(200).json(home);
   return;
 });
