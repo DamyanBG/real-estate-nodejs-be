@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { isValidObjectId } = require("mongoose");
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
 const mapErrors = require("../util/mapers");
 const { body, validationResult } = require("express-validator");
 const { updateUser, createUser } = require("../services/userService");
