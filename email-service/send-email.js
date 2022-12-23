@@ -27,6 +27,9 @@ async function main() {
           {
             email: "deathineyes@gmail.com",
           },
+          {
+            email: "Tihomirtx88@gmail.com"
+          },
         ],
       },
     };
