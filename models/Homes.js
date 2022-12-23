@@ -36,7 +36,7 @@ const homesSchema = new Schema({
         ref: "User",
         require: true
     },
-    views: {
+    homeViews: {
         type: Number,
         default: 0
     },
