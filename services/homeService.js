@@ -5,7 +5,10 @@ async function getAllHomes() {
 }
 
 async function getHomeById(id) {
-    return Homes.findById(id);
+    const home = await Homes.findById(id);
+    home.homeViews++;
+    await home.save();
+    return home;
 }
 
 async function createHome(home) {
