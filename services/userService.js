@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const { hash } = require("bcrypt");
 
 async function updateUser(userId, user) {
     const existing = await User.findById(userId);
