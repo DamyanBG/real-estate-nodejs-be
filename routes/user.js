@@ -4,7 +4,7 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const mapErrors = require("../util/mapers");
 const { body, validationResult } = require("express-validator");
-const { updateUser } = require("../services/userService");
+const { updateUser, createUser } = require("../services/userService");
 
 //Get user
 router.get("/", async (req, res) => {
@@ -48,24 +48,19 @@ router.post(
     .isAlphanumeric()
     .withMessage(`Password may content only letter and number`),
   async (req, res) => {
-    const user = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      hashedPassword: req.body.password,
-      role: req.body.role,
-      phone_number: req.body.phone_number,
-    };
-
     try {
       const { errors } = validationResult(req);
       if (errors.length > 0) {
         throw errors;
       }
 
-      const newUser = new User(user);
-      await newUser.save();
-      return res.status(201).json(newUser);
+      const user = await createUser(
+           req.body.first_name.trim().toLowerCase(), req.body.last_name.trim().toLowerCase(),
+           req.body.email.trim().toLowerCase(), req.body.password.trim().toLowerCase(),
+           req.body.role.trim().toLowerCase(), req.body.phone_number.trim().toLowerCase());
+
+      res.status(201).json(user);
+
     } catch (err) {
       console.error(err.message);
       res.status(400).json({ error: err });
@@ -123,7 +118,7 @@ router.put(
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      hashedPassword: req.body.password,
+      password: req.body.password,
       role: req.body.role,
       phone_number: req.body.phone_number,
     };

@@ -38,7 +38,6 @@ const homesSchema = new Schema({
     },
     views: {
         type: Number,
-        required: true,
         default: 0
     },
 });
