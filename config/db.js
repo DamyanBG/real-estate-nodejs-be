@@ -21,6 +21,7 @@ module.exports = async () => {
   } catch (err) {
     console.log(err);
     console.error(`Error during connection to the database`);
+    console.log("Please, check do you have .env file with variable AZURE_DATABASE_CONNECTION_STRING! It must contains the connection string to the database!")
     process.exit(1);
   }
 };
