@@ -54,9 +54,9 @@ router.post(
       }
 
       const user = await createUser(
-           req.body.first_name.trim().toLowerCase(), req.body.last_name.trim().toLowerCase(),
-           req.body.email.trim().toLowerCase(), req.body.password.trim().toLowerCase(),
-           req.body.role.trim().toLowerCase(), req.body.phone_number.trim().toLowerCase());
+           req.body.first_name.trim(), req.body.last_name.trim(),
+           req.body.email.trim(), req.body.password.trim(),
+           req.body.role.trim(), req.body.phone_number.trim());
 
       res.status(201).json(user);
 

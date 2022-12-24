@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
+    "test:mocha": "mocha 'test/**/*.test.js'",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
@@ -33,5 +35,11 @@
     "nodemon": "^2.0.20",
     "request": "^2.88.2",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "mocha": "^10.2.0",
+    "random-email": "^1.0.3",
+    "supertest": "^6.3.3"
   }
 }
