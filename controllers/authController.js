@@ -56,7 +56,7 @@ const logoutUser = async (req, res) => {
         expires: new Date(0),
         secure: true
     })
-    return res.status(202).json({message: "you have successfully logged out"})
+    return res.status(200).json({message: "you have successfully logged out"})
 }
 
 module.exports = {
