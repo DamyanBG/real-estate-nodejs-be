@@ -11,12 +11,12 @@ const visitationsSchema = new Schema({
     },
     organizator_id: {
         type: ObjectId,
-        require: true,
+        required: true,
         ref: "User"
     },
     address: {
         type: String,
-        require: true,       
+        required: true,       
     },
 });
 
