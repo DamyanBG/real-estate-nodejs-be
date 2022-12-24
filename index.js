@@ -11,6 +11,7 @@ const landRoute = require("./routes/land")
 const messageRoute = require("./routes/message")
 const emailRoute = require("./routes/send-mail")
 const newsRoute = require("./routes/news")
+const authRoutes = require("./routes/auth")
 
 start();
 
@@ -31,6 +32,8 @@ async function start() {
   app.use("/message", messageRoute)
   app.use("/email", emailRoute)
   app.use("/news", newsRoute)
+  app.use("/login", authRoutes)
+  app.use("/logout", authRoutes)
 
   const PORT = process.env.PORT || 3030;
   app.listen(PORT, () => console.log(`Server listen on port 3030`));
