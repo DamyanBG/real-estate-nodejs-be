@@ -3,7 +3,7 @@ const { isValidObjectId } = require('mongoose');
 const User = require('../models/User');
 const mapErrors = require('../util/mapers');
 const { body, validationResult } = require('express-validator');
-const { updateUser, createUser } = require('../services/userService');
+const { updateUser, createUser, findUserById } = require('../services/userService');
 
 //Get user
 router.get('/', async (req, res) => {
@@ -13,7 +13,8 @@ router.get('/', async (req, res) => {
     return;
   }
   try {
-    const user = await User.findById(userId);
+    const user = await findUserById(userId);
+    console.log(user, "user from the routes get")
     if (!user) {
       res.status(404).send('User with this id do not exists');
       return;

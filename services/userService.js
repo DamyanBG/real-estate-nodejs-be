@@ -45,7 +45,16 @@ async function getUserByEmail(email) {
     return user;
 }
 
+async function findUserById(userId) {
+    console.log('do we call fundUserId')
+    const user = await User.findById(userId);
+    console.log(user, "user from findUserById")
+    return user
+}
+
 module.exports = {
     updateUser,
-    createUser
+    createUser,
+    getUserByEmail,
+    findUserById
 }
