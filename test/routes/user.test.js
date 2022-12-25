@@ -1,13 +1,26 @@
-const request = require('supertest');
-const app = require('../../app');
-const mongoose = require('mongoose');
-const randomEmail = require('random-email');
+import request from 'supertest';
+import app from '../../app';
+import mongoose from 'mongoose';
+import randomEmail from 'random-email';
+import userService from '../../services/userService';
+import * as jest from 'jest';
 
 require('dotenv').config();
 
+const userId = new mongoose.Types.ObjectId().toString();
+
+const userPayload = {
+  _id: userId,
+  email: 'jane.doe@example.com',
+  name: 'Jane Doe',
+  first_name: 'Jane',
+  last_name: 'Doe',
+  role: 'user',
+};
+
 /* Connecting to the database before each test. */
 beforeEach(async () => {
-  await mongoose.connect(process.env.AZURE_DATABASE_CONNECTION_STRING);
+  await mongoose.connect(process.env.MONGODB_URI);
 });
 
 /* Dropping the database and closing connection after each test. */
@@ -25,16 +38,14 @@ describe('POST /user', () => {
     const role = 'user';
     const phoneNumber = '1234567890';
 
-    const res = await request(app)
-      .post('/user')
-      .send({
-        email,
-        first_name: firstName,
-        last_name: lastName,
-        password,
-        role,
-        phone_number: phoneNumber,
-      });
+    const res = await request(app).post('/user').send({
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      password,
+      role,
+      phone_number: phoneNumber,
+    });
 
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('_id');
@@ -43,5 +54,18 @@ describe('POST /user', () => {
     expect(res.body).toHaveProperty('last_name', lastName);
     expect(res.body).toHaveProperty('role', role);
     expect(res.body).toHaveProperty('phone_number', phoneNumber);
+  });
+});
+
+describe('GET /user', () => {
+  it('should get a user with id', async () => {
+    console.log(userService.findUserById, 'userService function');
+    jest.spyOn(userService, 'findUserById').mockReturnValueOnce(userPayload);
+
+    const { statusCode, body } = await request(app).get('/user').send({ user_id: userId });
+
+    expect(statusCode).toBe(200);
+
+    expect(body).toEqual(userPayload);
   });
 });
