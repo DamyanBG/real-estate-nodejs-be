@@ -33,8 +33,7 @@ async function start() {
   app.use("/message", messageRoute)
   app.use("/email", emailRoute)
   app.use("/news", newsRoute)
-  app.use("/login", authRoutes)
-  app.use("/logout", authRoutes)
+  app.use("/auth", authRoutes)
   app.use("/visitation", visitationRoute);
 
   const PORT = process.env.PORT || 3030;
