@@ -29,7 +29,7 @@ async function createUser(first_name, last_name, email, password, role, phone_nu
         first_name,
         last_name,
         email,
-        hashedPassword,
+        password: hashedPassword,
         role,
         phone_number
     })

@@ -7,7 +7,7 @@ require('dotenv').config();
 
 /* Connecting to the database before each test. */
 beforeEach(async () => {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(process.env.AZURE_DATABASE_CONNECTION_STRING);
 });
 
 /* Dropping the database and closing connection after each test. */
