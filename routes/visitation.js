@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const visitationId = req.params.id;
+  const visitationId = req.params.visitation_id;
   if (!isValidObjectId(visitationId)) {
     res.status(400).json("Invalid visitation id!");
     return;

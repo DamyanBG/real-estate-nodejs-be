@@ -5,9 +5,10 @@ const {
   getMeetingById,
   deleteMeeting,
   updateMeeting,
-  updadateStatusMeetings,
+  updateStatusMeetings,
 } = require('../services/meetingsService');
-
+const { STATUS_ENUMS } = require("../util/enums")
+ 
 const reqBodyToObject = (req) => ({
   start_date: req.body.start_date,
   end_date: req.body.end_date,
@@ -33,7 +34,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const meetingId = req.params.id;
+  const meetingId = req.params.meeting_id;
   if (!isValidObjectId(meetingId)) {
     res.status(400).json('Invalid meeting id!');
     return;
@@ -89,13 +90,19 @@ router.put('/', async (req, res) => {
 
 router.patch('/', async (req, res) => {
   const meetingId = req.body.meeting_id;
+  const meetingStatus = req.body.status;
+
+  if (!STATUS_ENUMS.includes(meetingStatus)) {
+    res.status(400).json('Invalid status!');
+    return;
+  }
 
   if (!isValidObjectId(meetingId)) {
     res.status(400).json('Invalid meeting id!');
     return;
   }
 
-  const newMeetingStatus = await updadateStatusMeetings(meetingId, req.body.status);
+  const newMeetingStatus = await updateStatusMeetings(meetingId, meetingStatus);
   return res.status(200).json(newMeetingStatus);
 });
 module.exports = router;

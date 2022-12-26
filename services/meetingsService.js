@@ -24,10 +24,10 @@ async function updateMeeting(meetingId, meeting) {
     return existing;
 }
 
-async function updadateStatusMeetings(meetingId, meeting) {
+async function updateStatusMeetings(meetingId, meetingStatus) {
     const existingMeeting = await Meetings.findById(meetingId);
 
-    existingMeeting.status = meeting.status;
+    existingMeeting.status = meetingStatus;
 
     await existingMeeting.save();
     return existingMeeting;
@@ -41,7 +41,7 @@ async function deleteMeeting(meetingId) {
 module.exports = {
     createMeeting,
     getMeetingById,
-    updadateStatusMeetings,
+    updateStatusMeetings,
     deleteMeeting,
     updateMeeting
 }
