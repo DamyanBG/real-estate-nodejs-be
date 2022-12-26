@@ -5,19 +5,19 @@ const EMAIL_REGEX = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
 const userSchema = new Schema({
     first_name: {
         type: String,
-        require: true,
+        required: true,
         min: 3,
         max: 50
     },
     last_name: {
         type: String,
-        require: true,
+        required: true,
         min: 3,
         max: 50
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         validate: {
             validator(value){
                 return EMAIL_REGEX.test(value);
@@ -27,16 +27,16 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     role: {
         type: String,
-        require: true,
+        required: true,
         enum: [`admin`, `broker`, `user`]
     },
     phone_number: {
         type: String,
-        require: true
+        required: true
     }
 });
 

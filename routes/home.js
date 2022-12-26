@@ -54,13 +54,13 @@ router.post(
 
 //Get home
 router.get("/", async (req, res) => {
-  const homeId = req.body.home_id;
+  const homeId = req.params.home_id;
   if (!isValidObjectId(homeId)) {
     res.status(400).json("Invalid home id!");
     return;
   }
 
-  const home = await getHomeById(req.body.home_id);
+  const home = await getHomeById(homeId);
   
   if (!home) {
     res.status(404).send("Home with this id do not exists");

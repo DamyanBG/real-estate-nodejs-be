@@ -36,7 +36,7 @@ router.post(
 );
 
 router.get("/", async (req, res) => {
-  const userId = req.body.user_id;
+  const userId = req.params.user_id;
   const interlocutorId = req.body.interlocutor_id;
   if (!isValidObjectId(interlocutorId) || !isValidObjectId(userId)) {
     res.status(400).json("Invalid sender or receiver!");
