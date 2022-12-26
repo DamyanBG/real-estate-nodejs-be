@@ -7,7 +7,7 @@ const { updateUser, createUser, findUserById } = require('../services/userServic
 
 //Get user
 router.get('/', async (req, res) => {
-  const userId = req.body.user_id;
+  const userId = req.params.id;
   if (!isValidObjectId(userId)) {
     res.status(400).send('Invalid params');
     return;

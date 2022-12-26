@@ -58,7 +58,7 @@ router.post(
 );
 
 router.get("/", async (req, res) => {
-  const landId = req.body.land_id;
+  const landId = req.params.id;
   if (!isValidObjectId(landId)) {
     res.status(400).json("Invalid land id!");
     return;

@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const meetingId = req.body.meeting_id;
+  const meetingId = req.params.id;
   if (!isValidObjectId(meetingId)) {
     res.status(400).json('Invalid meeting id!');
     return;
@@ -95,8 +95,7 @@ router.patch('/', async (req, res) => {
     return;
   }
 
-  const meetingStatusInfo = req.body.status;
-  const newMeetingStatus = await updadateStatusMeetings(meetingStatusInfo);
+  const newMeetingStatus = await updadateStatusMeetings(meetingId, req.body.status);
   return res.status(200).json(newMeetingStatus);
 });
 module.exports = router;
