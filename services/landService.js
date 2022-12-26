@@ -1,4 +1,4 @@
-const Land = require("../models/Land")
+const Land = require("../models/Land");
 
 async function createLand(land) {
     const createdLand = new Land(land)

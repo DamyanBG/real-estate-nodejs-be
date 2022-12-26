@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
   try {
     const user = await findUserById(userId);
-    console.log(user, "user from the routes get")
+
     if (!user) {
       res.status(404).send('User with this id do not exists');
       return;
