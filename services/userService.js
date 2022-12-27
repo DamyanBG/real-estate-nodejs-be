@@ -1,60 +1,92 @@
-const User = require("../models/User");
-const { hash } = require("bcrypt");
+const User = require('../models/User');
+const { hash } = require('bcrypt');
 
 async function updateUser(userId, user) {
-    const existing = await User.findById(userId);
+  const existing = await User.findById(userId);
 
-    existing.first_name = user.first_name;
-    existing.last_name = user.last_name;
-    existing.email = user.email;
-    existing.hashedPassword = user.hashedPassword;
-    existing.role = user.role;
-    existing.phone_number = user.phone_number;
+  existing.first_name = user.first_name;
+  existing.last_name = user.last_name;
+  existing.email = user.email;
+  existing.hashedPassword = user.hashedPassword;
+  existing.role = user.role;
+  existing.phone_number = user.phone_number;
 
-    await existing.save();
-    return existing;
+  await existing.save();
+  return existing;
 }
 
 async function createUser(first_name, last_name, email, password, role, phone_number) {
+  const existing = await getUserByEmail(email);
 
-    const existing = await getUserByEmail(email);
+  if (existing) {
+    throw new Error(`Email is taken`);
+  }
 
-    if (existing) {
-        throw new Error(`Email is taken`);
-    }
+  const hashedPassword = await hash(password, 10);
 
-    const hashedPassword = await hash(password, 10);
+  const user = new User({
+    first_name,
+    last_name,
+    email,
+    password: hashedPassword,
+    role,
+    phone_number,
+  });
 
-    const user = new User({
-        first_name,
-        last_name,
-        email,
-        password: hashedPassword,
-        role,
-        phone_number
-    })
+  await user.save();
 
-    await user.save();
-
-    return user;
-
+  return user;
 }
 
 async function getUserByEmail(email) {
-    const user = await User.findOne({ email: new RegExp(`^${email}$`, `i`) });
-    return user;
+  const user = await User.findOne({ email: new RegExp(`^${email}$`, `i`) });
+  return user;
 }
 
 async function findUserById(userId) {
-    console.log('do we call fundUserId')
-    const user = await User.findById(userId);
-    console.log(user, "user from findUserById")
-    return user
+  console.log('do we call fundUserId');
+  const user = await User.findById(userId);
+  console.log(user, 'user from findUserById');
+  return user;
+}
+
+async function updateUserProfile(userId, userProfile) {
+  const existing = await User.findById(userId);
+
+  existing.first_name = userProfile.firstName;
+  existing.last_name = userProfile.lastName;
+  existing.phone_number = userProfile.phoneNumber;
+
+  await existing.save();
+  return existing;
+}
+
+async function updateUserPassword(userId, password) {
+  const existing = await User.findById(userId);
+
+  const hashedPassword = await hash(password, 10);
+
+  existing.password = hashedPassword;
+
+  await existing.save();
+  return existing;
+}
+
+async function updateUserEmail(userId, email) {
+  const existing = await User.findById(userId);
+
+  existing.email = email;
+
+  await existing.save();
+  return existing;
 }
 
 module.exports = {
-    updateUser,
-    createUser,
-    getUserByEmail,
-    findUserById
-}
+  updateUser,
+  createUser,
+  getUserByEmail,
+  findUserById,
+  updateUserProfile,
+  updateUserPassword,
+  updateUserEmail,
+};

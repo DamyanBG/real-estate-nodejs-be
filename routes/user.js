@@ -3,7 +3,14 @@ const { isValidObjectId } = require('mongoose');
 const User = require('../models/User');
 const mapErrors = require('../util/mapers');
 const { body, validationResult } = require('express-validator');
-const { updateUser, createUser, findUserById } = require('../services/userService');
+const {
+  updateUser,
+  createUser,
+  findUserById,
+  updateUserProfile,
+  updateUserPassword,
+  updateUserEmail,
+} = require('../services/userService');
 
 //Get user
 router.get('/', async (req, res) => {
@@ -139,6 +146,94 @@ router.put(
       console.error(err.message);
       res.status(400).json({ error: err });
     }
+  }
+);
+
+router.patch(
+  '/profile',
+  body('first_name')
+    .isLength({ min: 3 })
+    .withMessage('First name must be at least 3 charaters long')
+    .isLength({ max: 10 })
+    .withMessage('First name must be less 10 charaters long'),
+  body('last_name')
+    .isLength({ min: 3 })
+    .withMessage('Last name must be at least 3 charaters long')
+    .isLength({ max: 10 }),
+  body('phone_number').isLength({ min: 3 }),
+  async (req, res) => {
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+      return;
+    }
+    const userId = req.body.user_id;
+    const phoneNumber = req.body.phone_number;
+    const firstName = req.body.first_name;
+    const lastName = req.body.last_name;
+
+    if (!isValidObjectId(userId)) {
+      res.status(400).json('Invalid user id!');
+      return;
+    }
+
+    const userInfo = {
+      firstName,
+      lastName,
+      phoneNumber,
+    };
+
+    const user = await updateUserProfile(userId, userInfo);
+    const { password, ...userResponse } = user._doc;
+    return res.status(200).json(userResponse);
+  }
+);
+
+router.patch(
+  '/password',
+  body('password')
+    .isLength({ min: 5 })
+    .withMessage(`Password must be at least 5 character long`)
+    .isAlphanumeric()
+    .withMessage(`Password may content only letter and number`),
+  async (req, res) => {
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+      return;
+    }
+    const userId = req.body.user_id;
+    const newPassword = req.body.password;
+    if (!isValidObjectId(userId)) {
+      res.status(400).json('Invalid user id!');
+      return;
+    }
+
+    const user = await updateUserPassword(userId, newPassword)
+    const { password, ...userResponse } = user._doc;
+    return res.status(200).json(userResponse);
+  }
+);
+
+router.patch(
+  '/email',
+  body('email').isEmail().withMessage('Email must be valid'),
+  async (req, res) => {
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+      return;
+    }
+    const userId = req.body.user_id;
+    const email = req.body.email;
+    if (!isValidObjectId(userId)) {
+      res.status(400).json('Invalid user id!');
+      return;
+    }
+
+    const user = await updateUserEmail(userId, email)
+    const { password, ...userResponse } = user._doc;
+    return res.status(200).json(userResponse);
   }
 );
 
