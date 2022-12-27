@@ -31,6 +31,14 @@ const homesSchema = new Schema({
         min:5,
         max: 150
     },
+    longitude: {
+        type: String,
+        max: 30
+    },
+    latitude: {
+        type: String,
+        max: 30
+    },
     owner: {
         type: ObjectId,
         ref: "User",
