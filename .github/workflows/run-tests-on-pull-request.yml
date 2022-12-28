@@ -1,0 +1,32 @@
+name: Build and test Node.js app - realestateappforeverybody
+
+on:
+  pull_request:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: npm install and build
+        run: |
+          npm install
+          npm install -g nodemon
+          npm run build --if-present
+
+      - name: Run tests
+        run: npm test
+
+      - name: Write comment on pull request
+        uses: actions/create-or-update-comment@v1
+        with:
+          body: "Build and test completed with status '${{ job.status }}' and conclusion '${{ job.conclusion }}'"
