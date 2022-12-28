@@ -13,7 +13,7 @@ const {
 } = require('../services/userService');
 
 //Get user
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const userId = req.params.id;
   if (!isValidObjectId(userId)) {
     res.status(400).send('Invalid params');
