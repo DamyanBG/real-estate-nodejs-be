@@ -44,9 +44,7 @@ async function getUserByEmail(email) {
 }
 
 async function findUserById(userId) {
-  console.log('do we call fundUserId');
   const user = await User.findById(userId);
-  console.log(user, 'user from findUserById');
   return user;
 }
 
