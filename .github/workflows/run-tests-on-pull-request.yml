@@ -26,7 +26,3 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Write comment on pull request
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          body: "Build and test completed with status '${{ job.status }}' and conclusion '${{ job.conclusion }}'"
