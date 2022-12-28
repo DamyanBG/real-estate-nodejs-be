@@ -47,8 +47,9 @@ router.post(
 );
 
 //Get home
-router.get('/', async (req, res) => {
+router.get('/:home_id', async (req, res) => {
   const homeId = req.params.home_id;
+  console.log(homeId, "homeId from router")
   if (!isValidObjectId(homeId)) {
     res.status(400).json('Invalid home id!');
     return;
