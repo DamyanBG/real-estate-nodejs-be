@@ -1,9 +1,9 @@
-const router = require("express").Router();
+import express from 'express';
+const router = express.Router();
 
 //Check if the app works
-router.get("/", async (req,res) => {
-    return res.status(200).json("works")
+router.get('/', async (req, res) => {
+  return res.status(200).json('works');
 });
 
-
-module.exports = router;
+export default router;

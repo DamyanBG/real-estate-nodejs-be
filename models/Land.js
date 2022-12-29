@@ -1,8 +1,4 @@
-const {
-  model,
-  Schema,
-  Types: { ObjectId },
-} = require("mongoose");
+import { model, Schema, Types } from 'mongoose';
 
 const landSchema = new Schema({
   name: {
@@ -32,8 +28,8 @@ const landSchema = new Schema({
     max: 150,
   },
   owner: {
-    type: ObjectId,
-    ref: "User"
+    type: Types.ObjectId,
+    ref: 'User',
   },
   longitude: {
     type: String,
@@ -43,5 +39,5 @@ const landSchema = new Schema({
   },
 });
 
-const Land = model("Land", landSchema);
-module.exports = Land;
+const Land = model('Land', landSchema);
+export default Land;

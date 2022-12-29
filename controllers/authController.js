@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { hash, compare } = require(`bcrypt`);
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import { hash, compare } from 'bcrypt';
 
-generateToken = async (id) => {
+const generateToken = async (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
@@ -68,7 +68,4 @@ const logoutUser = async (req, res) => {
   return res.status(200).json({ message: 'you have successfully logged out' });
 };
 
-module.exports = {
-  loginUser,
-  logoutUser,
-};
+export { loginUser, logoutUser };

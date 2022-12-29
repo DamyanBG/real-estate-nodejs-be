@@ -1,7 +1,12 @@
-const router = require("express").Router();
-const { isValidObjectId } = require("mongoose");
-const { body, validationResult } = require("express-validator");
-const { createMessage, queryReceivedMessages, querySentMessages } = require("../services/messageService");
+import express from 'express';
+const router = express.Router();
+import { isValidObjectId } from 'mongoose';
+import { body, validationResult } from 'express-validator';
+import {
+  createMessage,
+  queryReceivedMessages,
+  querySentMessages,
+} from '../services/messageService.js';
 
 const reqBodyToObject = (req) => ({
   sender_id: req.body.sender_id,
@@ -10,23 +15,20 @@ const reqBodyToObject = (req) => ({
 });
 
 router.post(
-  "/",
-  body("text")
+  '/',
+  body('text')
     .isLength({ min: 1 })
-    .withMessage("The message is too short!")
+    .withMessage('The message is too short!')
     .isLength({ max: 150 })
-    .withMessage("The message is too long!"),
+    .withMessage('The message is too long!'),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     const messageInfo = reqBodyToObject(req);
-    if (
-      !isValidObjectId(messageInfo.sender_id) ||
-      !isValidObjectId(messageInfo.receiver_id)
-    ) {
-      res.status(400).json("Invalid sender or receiver!");
+    if (!isValidObjectId(messageInfo.sender_id) || !isValidObjectId(messageInfo.receiver_id)) {
+      res.status(400).json('Invalid sender or receiver!');
       return;
     }
 
@@ -35,20 +37,20 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const userId = req.params.user_id;
   const interlocutorId = req.body.interlocutor_id;
   if (!isValidObjectId(interlocutorId) || !isValidObjectId(userId)) {
-    res.status(400).json("Invalid sender or receiver!");
+    res.status(400).json('Invalid sender or receiver!');
     return;
   }
-  const sentMessages = await querySentMessages(userId, interlocutorId)
-  const receivedMessages = await queryReceivedMessages(userId, interlocutorId)
+  const sentMessages = await querySentMessages(userId, interlocutorId);
+  const receivedMessages = await queryReceivedMessages(userId, interlocutorId);
   const messages = {
     sentMessages: sentMessages,
-    receivedMessages: receivedMessages
-  }
+    receivedMessages: receivedMessages,
+  };
   res.status(200).json(messages);
 });
 
-module.exports = router;
+export default router;

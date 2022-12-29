@@ -1,14 +1,15 @@
-const router = require('express').Router();
-const { isValidObjectId } = require('mongoose');
-const {
+import express from 'express';
+const router = express.Router();
+import { isValidObjectId } from 'mongoose';
+import {
   createMeeting,
   getMeetingById,
   deleteMeeting,
   updateMeeting,
   updateStatusMeetings,
-} = require('../services/meetingsService');
-const { STATUS_ENUMS } = require("../util/enums")
- 
+} from '../services/meetingsService.js';
+import { STATUS_ENUMS } from '../util/enums.js';
+
 const reqBodyToObject = (req) => ({
   start_date: req.body.start_date,
   end_date: req.body.end_date,
@@ -83,7 +84,7 @@ router.put('/', async (req, res) => {
     return;
   }
 
-  console.log(meetingInfo, "meeting infoto");
+  console.log(meetingInfo, 'meeting infoto');
   const newMeeting = await updateMeeting(meetingInfo);
   return res.status(200).json(newMeeting);
 });
@@ -105,4 +106,4 @@ router.patch('/', async (req, res) => {
   const newMeetingStatus = await updateStatusMeetings(meetingId, meetingStatus);
   return res.status(200).json(newMeetingStatus);
 });
-module.exports = router;
+export default router;

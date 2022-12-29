@@ -1,6 +1,6 @@
-const Homes = require('../models/Homes');
+import Homes from '../models/Homes.js';
 
-async function getAllHomes() {
+export default async function getAllHomes() {
   return Homes.find({});
 }
 
@@ -38,10 +38,4 @@ async function deleteHome(homeId) {
   await home.save();
 }
 
-module.exports = {
-  getAllHomes,
-  getHomeById,
-  createHome,
-  updateHome,
-  deleteHome,
-};
+export { getHomeById, createHome, updateHome, deleteHome };

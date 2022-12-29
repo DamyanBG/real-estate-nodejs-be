@@ -1,9 +1,9 @@
-const express = require("express");
-const cors = require("cors");
+import express from 'express';
+import cors from 'cors';
 
-module.exports = (app) => {
-    app.use(cors());
-    app.use(express.json());
-    // TODO auth middleware later
-    app.use(express.urlencoded({extended: true}));
-}
+export default (app) => {
+  app.use(cors());
+  app.use(express.json());
+  // TODO auth middleware later
+  app.use(express.urlencoded({ extended: true }));
+};

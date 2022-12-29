@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const { hash } = require('bcrypt');
+import User from '../models/User.js';
+import { hash } from 'bcrypt';
 
 async function updateUser(userId, user) {
   const existing = await User.findById(userId);
@@ -81,7 +81,7 @@ async function updateUserEmail(userId, email) {
   return existing;
 }
 
-module.exports = {
+export {
   updateUser,
   createUser,
   getUserByEmail,

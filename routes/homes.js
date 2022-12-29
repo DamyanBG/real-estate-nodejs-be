@@ -1,10 +1,12 @@
-const router = require("express").Router();
-const { getAllHomes } = require("../services/homeService");
+import express from 'express';
+import getAllHomes from '../services/homeService.js';
+
+const router = express.Router();
 
 //Get all homes
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const homes = await getAllHomes();
   res.status(200).json(homes);
 });
 
-module.exports = router;
+export default router;

@@ -1,7 +1,8 @@
-const router = require('express').Router();
-const { isValidObjectId } = require('mongoose');
-const { createHome, getHomeById, deleteHome, updateHome } = require('../services/homeService');
-const { body, validationResult } = require('express-validator');
+import express from 'express';
+const router = express.Router();
+import { isValidObjectId } from 'mongoose';
+import { createHome, getHomeById, deleteHome, updateHome } from '../services/homeService.js';
+import { body, validationResult } from 'express-validator';
 
 const reqBodyToObject = (req) => ({
   name: req.body.name,
@@ -11,7 +12,7 @@ const reqBodyToObject = (req) => ({
   year: req.body.year,
   description: req.body.description,
   longitude: req.body.longitude,
-  latitude: req.body.latitude
+  latitude: req.body.latitude,
 });
 
 //Create home
@@ -33,7 +34,7 @@ router.post(
     .isLength({ max: 100 })
     .withMessage(`Description must less 50 character long`),
   async (req, res) => {
-    const home = reqBodyToObject(req)
+    const home = reqBodyToObject(req);
 
     const { errors } = validationResult(req);
     if (errors.length > 0) {
@@ -72,7 +73,7 @@ router.delete('/', async (req, res) => {
     res.status(400).json('Invalid home id!');
     return;
   }
-  
+
   await deleteHome(req.body.home_id);
   res.status(200).json('Home property is delete');
 });
@@ -101,7 +102,7 @@ router.put(
       res.status(400).json('Invalid home id!');
       return;
     }
-    const home = reqBodyToObject(req)
+    const home = reqBodyToObject(req);
     const { errors } = validationResult(req);
     if (errors.length > 0) {
       res.status(400).json(errors);
@@ -112,4 +113,4 @@ router.put(
   }
 );
 
-module.exports = router;
+export default router;

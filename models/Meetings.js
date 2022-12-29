@@ -1,9 +1,5 @@
-const {
-  model,
-  Schema,
-  Types: { ObjectId },
-} = require('mongoose');
-const { STATUS_ENUMS } = require('../util/enums');
+import { model, Schema, Types } from 'mongoose';
+import { STATUS_ENUMS } from '../util/enums.js';
 
 const meetingsSchema = new Schema(
   {
@@ -16,12 +12,12 @@ const meetingsSchema = new Schema(
       required: true,
     },
     invitor_id: {
-      type: ObjectId,
+      type: Types.ObjectId,
       required: true,
       ref: 'User',
     },
     invited_id: {
-      type: ObjectId,
+      type: Types.ObjectId,
       required: true,
       ref: 'User',
     },
@@ -35,4 +31,4 @@ const meetingsSchema = new Schema(
 );
 
 const Meetings = model('Meetings', meetingsSchema);
-module.exports = Meetings;
+export default Meetings;

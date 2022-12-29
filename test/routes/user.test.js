@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 import randomEmail from 'random-email';
 import userService from '../../services/userService';
 import * as jest from 'jest';
-
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const userId = new mongoose.Types.ObjectId().toString();
 

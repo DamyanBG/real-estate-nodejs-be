@@ -1,25 +1,26 @@
+import dotenv from 'dotenv';
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+  dotenv.config();
 }
 
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const multer = require("multer");
+import multer from 'multer';
 const inMemoryStorage = multer.memoryStorage();
-const uploadStrategy = multer({ storage: inMemoryStorage }).single("photo");
-const { BlockBlobClient } = require("@azure/storage-blob");
-const getStream = require("into-stream");
+const uploadStrategy = multer({ storage: inMemoryStorage }).single('photo');
+import { BlockBlobClient } from '@azure/storage-blob';
+import getStream from 'into-stream';
 
 const CONTAINER_NAME = process.env.CONTAINER_NAME;
-const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
 console.log(CONTAINER_NAME);
-  
-router.post("/", uploadStrategy, (req, res) => {
-  const fileName = req.file.originalname
-  const homeId = req.body.home_id
+
+router.post('/', uploadStrategy, (req, res) => {
+  const fileName = req.file.originalname;
+  const homeId = req.body.home_id;
   const blobName = `${homeId}/${fileName}`;
-  
+
   const blobService = new BlockBlobClient(
     AZURE_STORAGE_CONNECTION_STRING,
     CONTAINER_NAME,
@@ -33,18 +34,18 @@ router.post("/", uploadStrategy, (req, res) => {
   };
 
   const handleSucess = () => {
-    res.status(201).json("OK");
+    res.status(201).json('OK');
   };
 
   blobService
     .uploadStream(stream, streamLength)
     .then(() => {
-      console.log("success");
+      console.log('success');
       handleSucess();
       return;
     })
     .catch((err) => {
-      console.log("error");
+      console.log('error');
       if (err) {
         console.log(err);
         handleError(err);
@@ -53,4 +54,4 @@ router.post("/", uploadStrategy, (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

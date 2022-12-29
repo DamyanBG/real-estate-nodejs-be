@@ -1,10 +1,10 @@
-const router = require("express").Router();
-const { main } = require("../latest-news/get-latest-news")
+import express from 'express';
+const router = express.Router();
+import { main } from '../latest-news/get-latest-news.js';
 
 //Get latest news
-router.get("/", async (req,res) => {
-    main(res)
+router.get('/', async (req, res) => {
+  main(res);
 });
 
-
-module.exports = router;
+export default router;

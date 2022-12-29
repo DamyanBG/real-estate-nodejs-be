@@ -1,16 +1,18 @@
-const router = require('express').Router();
-const { isValidObjectId } = require('mongoose');
-const User = require('../models/User');
-const mapErrors = require('../util/mapers');
-const { body, validationResult } = require('express-validator');
-const {
+import express from 'express';
+import User from '../models/User.js';
+
+const router = express.Router();
+import { isValidObjectId } from 'mongoose';
+import mapErrors from '../util/mapers.js';
+import { body, validationResult } from 'express-validator';
+import {
   updateUser,
   createUser,
   findUserById,
   updateUserProfile,
   updateUserPassword,
   updateUserEmail,
-} = require('../services/userService');
+} from '../services/userService.js';
 
 //Get user
 router.get('/', async (req, res) => {
@@ -209,7 +211,7 @@ router.patch(
       return;
     }
 
-    const user = await updateUserPassword(userId, newPassword)
+    const user = await updateUserPassword(userId, newPassword);
     const { password, ...userResponse } = user._doc;
     return res.status(200).json(userResponse);
   }
@@ -231,10 +233,10 @@ router.patch(
       return;
     }
 
-    const user = await updateUserEmail(userId, email)
+    const user = await updateUserEmail(userId, email);
     const { password, ...userResponse } = user._doc;
     return res.status(200).json(userResponse);
   }
 );
 
-module.exports = router;
+export default router;
