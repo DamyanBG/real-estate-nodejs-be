@@ -3,7 +3,7 @@ const User = require('../../models/User')
 const mockingoose = require('mockingoose');
 const app = require('../../app')
 
-describe('POST /user', () => {
+describe('Positive POST /user', () => {
   beforeEach(() => {
     mockingoose.resetAll();
     mockingoose(User).toReturn(
@@ -38,6 +38,34 @@ describe('POST /user', () => {
     expect(res.body.email).toEqual('test@example.com');
     expect(res.body.password).toEqual(undefined);
   });
-
-//   it('should return status code ')
 });
+
+describe('Negative POST /user', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+    mockingoose(User).toReturn(
+      {
+        _id: '63aca8c7826cd2f2bfda5914',
+        first_name: 'Test',
+        last_name: 'User',
+        email: 'test@example.com',
+        password: 'password',
+        role: 'admin',
+        phone_number: '123-456-7890'
+      },
+      'save'
+    );
+  });
+  it('should return status code 400', async () => {
+    const res = await request(app)
+      .post('/user')
+      .send({
+        last_name: 'User',
+        email: 'test@example.com',
+        password: 'password',
+        role: 'admin',
+        phone_number: '123-456-7890'
+      });
+    expect(res.status).toEqual(400);
+  })
+})
