@@ -25,7 +25,7 @@ router.post(
     .isLength({ min: 3 })
     .withMessage("Name must be at least 3 charaters long")
     .isLength({ max: 100 })
-    .withMessage("Name must be less 10 charaters long"),
+    .withMessage("Name must be less 100 charaters long"),
   body("place")
     .isLength({ min: 3 })
     .withMessage("Place name must be at least 3 charaters long")
@@ -93,7 +93,7 @@ router.put(
     .isLength({ min: 3 })
     .withMessage("Name must be at least 3 charaters long")
     .isLength({ max: 100 })
-    .withMessage("Name must be less 10 charaters long"),
+    .withMessage("Name must be less 100 charaters long"),
   body("place")
     .isLength({ min: 3 })
     .withMessage("Place name must be at least 3 charaters long")
