@@ -1,23 +1,10 @@
 const mockingoose = require('mockingoose');
 const Homes = require('../../models/Homes');
-const User = require('../../models/User');
 const request = require('supertest');
 const app = require('../../app');
 
-describe('Positive GET /home', () => {
-    it('should get home by id', async () => {
-        mockingoose(User).toReturn(
-            {
-                _id: '632beab54298559b57ff172f',
-                first_name: 'John',
-                last_name: 'Doe',
-                email: 'mail@abv.bg',
-                phone_number: '34343434',
-                role: 'admin',
-                password: '123adminsffe',
-            },
-            'findOne'
-        );
+describe('Positive DELETE /home', () => {
+    it('should delete home by id', async () => {
         mockingoose(Homes).toReturn(
             {
                 _id: '652beab54298559b57ff172f',
@@ -48,11 +35,11 @@ describe('Positive GET /home', () => {
                 owner: "632beab54298559b57ff172f",
                 homeViews: "200",
             },
-            'save'
+            'findByIdAndDelete'
         );
-        const res = await request(app).get(`/home/652beab54298559b57ff172f`);
+        const res = await request(app).delete(`/home`).send({home_id: "652beab54298559b57ff172f"});
 
         expect(res.statusCode).toEqual(200);
-        
+        expect(res.body).toEqual('Home has been deleted');
     });
 });

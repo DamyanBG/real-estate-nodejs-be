@@ -34,8 +34,7 @@ async function updateHome(homeId, home) {
 }
 
 async function deleteHome(homeId) {
-  const home = await Homes.findByIdAndDelete(homeId);
-  await home.save();
+  await Homes.findByIdAndDelete(homeId);
 }
 
 module.exports = {
