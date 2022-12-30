@@ -11,8 +11,7 @@ async function getLandById(landId) {
 }
 
 async function deleteLand(landId) {
-  const land = await Land.findByIdAndDelete(landId);
-  await land.save();
+    await Land.findByIdAndDelete(landId);   
 }
 
 async function updateLand(landId, land) {

@@ -48,8 +48,9 @@ router.post(
 );
 
 //Get home
-router.get('/', async (req, res) => {
+router.get('/:home_id', async (req, res) => {
   const homeId = req.params.home_id;
+  console.log(homeId, "homeId from router")
   if (!isValidObjectId(homeId)) {
     res.status(400).json('Invalid home id!');
     return;
@@ -73,9 +74,9 @@ router.delete('/', async (req, res) => {
     res.status(400).json('Invalid home id!');
     return;
   }
-
-  await deleteHome(req.body.home_id);
-  res.status(200).json('Home property is delete');
+  
+  await deleteHome(homeId);
+  res.status(200).json('Home has been deleted');
 });
 
 //Update home
@@ -84,17 +85,17 @@ router.put(
   body('name')
     .isLength({ min: 3 })
     .withMessage('Property name must be at least 3 charaters long')
-    .isLength({ max: 10 })
+    .isLength({ max: 100 })
     .withMessage('Property name must be less 10 charaters long'),
   body('place')
     .isLength({ min: 3 })
     .withMessage('Place name must be at least 3 charaters long')
-    .isLength({ max: 12 })
+    .isLength({ max: 100 })
     .withMessage('Place name must be less 12 charaters long'),
   body('description')
     .isLength({ min: 5 })
     .withMessage(`Description must be at least 5 character long`)
-    .isLength({ max: 50 })
+    .isLength({ max: 150 })
     .withMessage(`Description must less 50 character long`),
   async (req, res) => {
     const homeId = req.body.home_id;

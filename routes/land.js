@@ -21,8 +21,8 @@ router.post(
     .isLength({ min: 3 })
     .withMessage('Name must be at least 3 charaters long')
     .isLength({ max: 100 })
-    .withMessage('Name must be less 10 charaters long'),
-  body('place')
+    .withMessage("Name must be less 100 charaters long"),
+  body("place")
     .isLength({ min: 3 })
     .withMessage('Place name must be at least 3 charaters long')
     .isLength({ max: 100 })
@@ -53,7 +53,7 @@ router.post(
   }
 );
 
-router.get('/', async (req, res) => {
+router.get("/:land_id", async (req, res) => {
   const landId = req.params.land_id;
   if (!isValidObjectId(landId)) {
     res.status(400).json('Invalid land id!');
@@ -77,7 +77,7 @@ router.delete('/', async (req, res) => {
   }
   try {
     await deleteLand(req.body.home_id);
-    res.status(200).json('Land is deleted');
+    res.status(200).json("Land has been deleted");
   } catch (err) {
     return res.status(400).json(err);
   }
@@ -89,8 +89,8 @@ router.put(
     .isLength({ min: 3 })
     .withMessage('Name must be at least 3 charaters long')
     .isLength({ max: 100 })
-    .withMessage('Name must be less 10 charaters long'),
-  body('place')
+    .withMessage("Name must be less 100 charaters long"),
+  body("place")
     .isLength({ min: 3 })
     .withMessage('Place name must be at least 3 charaters long')
     .isLength({ max: 100 })
@@ -103,7 +103,7 @@ router.put(
     .isLength({ max: 150 })
     .withMessage(`Description must less 150 character long`),
   async (req, res) => {
-    const landId = req.body_land_id;
+    const landId = req.body.land_id;
     if (!isValidObjectId(landId)) {
       res.status(400).json('Invalid land id!');
       return;
@@ -114,14 +114,12 @@ router.put(
     }
     const landInfo = reqBodyToObject(req);
 
-    if (landInfo.owner) {
-      if (!isValidObjectId(landInfo.owner)) {
-        res.status(400).json('Invalid owner id!');
-        return;
-      }
+    if (!isValidObjectId(landInfo.owner)) {
+      res.status(400).json("Invalid owner id!");
+      return;
     }
-
-    const newLand = await updateLand(landInfo);
+    
+    const newLand = await updateLand(landId, landInfo);
     return res.status(200).json(newLand);
   }
 );

@@ -15,7 +15,7 @@ import {
 } from '../services/userService.js';
 
 //Get user
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const userId = req.params.id;
   if (!isValidObjectId(userId)) {
     res.status(400).send('Invalid params');
@@ -57,27 +57,24 @@ router.post(
     .isAlphanumeric()
     .withMessage(`Password may content only letter and number`),
   async (req, res) => {
-    try {
-      const { errors } = validationResult(req);
-      if (errors.length > 0) {
-        throw errors;
-      }
-
-      const user = await createUser(
-        req.body.first_name.trim(),
-        req.body.last_name.trim(),
-        req.body.email.trim(),
-        req.body.password.trim(),
-        req.body.role.trim(),
-        req.body.phone_number.trim()
-      );
-
-      const { password, ...other } = user._doc;
-      res.status(201).json(other);
-    } catch (err) {
-      console.error(err.message);
-      res.status(400).json({ error: err });
+    
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+      return
     }
+
+    const user = await createUser(
+      req.body.first_name.trim(),
+      req.body.last_name.trim(),
+      req.body.email.trim(),
+      req.body.password.trim(),
+      req.body.role.trim(),
+      req.body.phone_number.trim()
+    );
+
+    const { password, ...other } = user._doc;
+    res.status(201).json(other);
   }
 );
 
@@ -109,14 +106,14 @@ router.put(
   body('first_name')
     .isLength({ min: 3 })
     .withMessage('First name must be at least 3 charaters long')
-    .isLength({ max: 10 })
+    .isLength({ max: 50 })
     .withMessage('First name must be less 10 charaters long'),
   body('last_name')
     .isLength({ min: 3 })
     .withMessage('Last name must be at least 3 charaters long')
-    .isLength({ max: 10 })
+    .isLength({ max: 50 })
     .withMessage('Last name must be less 10 charaters long'),
-  body('hashedPassword')
+  body('password')
     .isLength({ min: 5 })
     .withMessage(`Password must be at least 5 character long`)
     .isAlphanumeric()
@@ -127,6 +124,12 @@ router.put(
       res.status(400).json('Invalid user id!');
       return;
     }
+    const { errors } = validationResult(req);
+    if (errors.length > 0) {
+      res.status(400).json(errors);
+      return;
+    }
+
     const user = {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -136,18 +139,10 @@ router.put(
       phone_number: req.body.phone_number,
     };
 
-    try {
-      const { errors } = validationResult(req);
-      if (errors.length > 0) {
-        throw errors;
-      }
+    const currentUser = await updateUser(userId, user);
 
-      const currentUser = await updateUser(userId, user);
-      return res.status(200).json(currentUser);
-    } catch (err) {
-      console.error(err.message);
-      res.status(400).json({ error: err });
-    }
+    const { password, ...response } = currentUser._doc;
+    return res.status(200).json(response);
   }
 );
 
