@@ -35,9 +35,9 @@ router.post(
   }
 );
 
-router.get("/", async (req, res) => {
+router.get("/:user_id&:interlocutor_id", async (req, res) => {
   const userId = req.params.user_id;
-  const interlocutorId = req.body.interlocutor_id;
+  const interlocutorId = req.params.interlocutor_id;
   if (!isValidObjectId(interlocutorId) || !isValidObjectId(userId)) {
     res.status(400).json("Invalid sender or receiver!");
     return;
