@@ -8,36 +8,42 @@ describe('Positive DELETE /home', () => {
         mockingoose(Homes).toReturn(
             {
                 _id: '652beab54298559b57ff172f',
-                name: 'Nice house',
-                place: 'Dobrich',
+                title: 'Nice house',
+                city: 'Dobrich',
+                neighborhood: 'Drujba',
+                address: 'Blok 42 A 2 8',
                 price: '10000',
                 size: '150',
                 year: '1960',
                 description: 'Really nice house, have 2 rooms',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
-                homeViews: "200",
+                owner: '632beab54298559b57ff172f',
+                homeViews: '200',
             },
             'findOne'
         );
         mockingoose(Homes).toReturn(
             {
                 _id: '652beab54298559b57ff172f',
-                name: 'Nice house',
-                place: 'Dobrich',
+                title: 'Nice house',
+                city: 'Dobrich',
+                neighborhood: 'Drujba',
+                address: 'Blok 42 A 2 8',
                 price: '10000',
                 size: '150',
                 year: '1960',
                 description: 'Really nice house, have 2 rooms',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
-                homeViews: "200",
+                owner: '632beab54298559b57ff172f',
+                homeViews: '200',
             },
             'findByIdAndDelete'
         );
-        const res = await request(app).delete(`/home`).send({home_id: "652beab54298559b57ff172f"});
+        const res = await request(app)
+            .delete(`/home`)
+            .send({ home_id: '652beab54298559b57ff172f' });
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual('Home has been deleted');

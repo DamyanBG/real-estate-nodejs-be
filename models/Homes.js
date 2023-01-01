@@ -1,20 +1,31 @@
 const { model, Schema, Types: {ObjectId}} = require("mongoose");
 
 const homesSchema = new Schema({
-    name: {
+    title: {
         type: String,
         required: true,
         min: 3,
         max: 100
     },
-    place: {
+    city: {
         type: String,
         required: true,
         min: 3,
         max: 100
+    },
+    neighborhood: {
+        type: String,
+        required: true,
+        min: 3,
+        max: 100
+    },
+    address: {
+        type: String,
+        min: 3,
+        max: 255
     },
     price: {
-        type: Number,
+        type: String,
         required: true,
     },
     size: {
@@ -28,8 +39,8 @@ const homesSchema = new Schema({
     description: {
         type: String,
         required: true,
-        min:5,
-        max: 150
+        min: 5,
+        max: 255
     },
     longitude: {
         type: String,

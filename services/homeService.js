@@ -20,8 +20,10 @@ async function createHome(home) {
 async function updateHome(homeId, home) {
   const existing = await Homes.findById(homeId);
 
-  existing.name = home.name;
-  existing.place = home.place;
+  existing.title = home.title;
+  existing.city = home.city;
+  existing.neighborhood = home.neighborhood;
+  existing.address = home.address;
   existing.price = home.price;
   existing.size = home.size;
   existing.year = home.year;
