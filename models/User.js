@@ -32,7 +32,7 @@ const userSchema = new Schema({
     role: {
         type: String,
         required: true,
-        enum: [`admin`, `broker`, `user`]
+        enum: [`admin`, `seller`, `user`]
     },
     phone_number: {
         type: String,

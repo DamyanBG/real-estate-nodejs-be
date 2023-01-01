@@ -22,11 +22,11 @@ router.get("/roleUsers",async(req,res) => {
     }
 })
 
-//GET only brokers
-router.get("/roleBrokers",async(req,res) => { 
+//GET only sellers
+router.get("/roleSellers",async(req,res) => { 
     try{
-        const brokers = await User.find({role : 'broker'});
-        res.status(200).json(brokers);
+        const sellers = await User.find({role : 'seller'});
+        res.status(200).json(sellers);
     }catch(err) 
     { 
         res.status(500).json(err);
