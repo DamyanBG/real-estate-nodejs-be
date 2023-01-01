@@ -14,6 +14,7 @@ const newsRoute = require("./routes/news")
 const authRoutes = require("./routes/auth")
 const visitationRoute = require("./routes/visitation");
 const meetingRoute = require("./routes/meeting");
+const landsRoute = require("./routes/lands")
 
 start();
 
@@ -35,6 +36,7 @@ async function start() {
   app.use("/auth", authRoutes)
   app.use("/visitation", visitationRoute);
   app.use("/meetings", meetingRoute);
+  app.use("/lands", landsRoute);
 
   const PORT = process.env.PORT || 3030;
   app.listen(PORT, () => console.log(`Server listen on port 3030`));

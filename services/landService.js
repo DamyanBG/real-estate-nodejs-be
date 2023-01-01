@@ -30,9 +30,14 @@ async function updateLand(landId, land) {
     return existing;
 }
 
+async function getAllLands() {
+    return Land.find({});
+  }
+
 module.exports = {
     createLand,
     getLandById,
     deleteLand,
-    updateLand
+    updateLand,
+    getAllLands,
 }

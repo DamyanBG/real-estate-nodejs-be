@@ -58,6 +58,7 @@ const loginUser = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
+  console.log("something")
   res.cookie('token', '', {
     path: '/',
     httpOnly: true,
