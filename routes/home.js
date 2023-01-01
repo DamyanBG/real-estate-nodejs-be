@@ -4,34 +4,47 @@ const { createHome, getHomeById, deleteHome, updateHome } = require('../services
 const { body, validationResult } = require('express-validator');
 
 const reqBodyToObject = (req) => ({
-  name: req.body.name,
-  place: req.body.place,
-  price: Number(req.body.price),
+  title: req.body.title,
+  city: req.body.city,
+  neighborhood: req.body.neighborhood,
+  address: req.body.address,
+  price: req.body.price,
   size: req.body.size,
   year: req.body.year,
   description: req.body.description,
   longitude: req.body.longitude,
-  latitude: req.body.latitude
+  latitude: req.body.latitude,
+  owner: req.body.owner
 });
 
 //Create home
 router.post(
   '/',
-  body('name')
+  body('title')
     .isLength({ min: 3 })
-    .withMessage('Property name must be at least 3 charaters long')
+    .withMessage('Property title must be at least 3 charaters long')
     .isLength({ max: 100 })
-    .withMessage('Property name must be less 10 charaters long'),
-  body('place')
+    .withMessage('Property title must be less 100 charaters long'),
+  body('city')
     .isLength({ min: 3 })
-    .withMessage('Place name must be at least 3 charaters long')
+    .withMessage('City must be at least 3 charaters long')
     .isLength({ max: 100 })
-    .withMessage('Place name must be less 12 charaters long'),
+    .withMessage('City must be less 100 charaters long'),
+  body('neighborhood')
+    .isLength({ min: 3 })
+    .withMessage('Neighborhood must be at least 3 charaters long')
+    .isLength({ max: 100 })
+    .withMessage('Neighborhood must be less 100 charaters long'),
+  body('address')
+    .isLength({ min: 3 })
+    .withMessage('Address must be at least 3 charaters long')
+    .isLength({ max: 255 })
+    .withMessage('Address must be less 255 charaters long'),
   body('description')
     .isLength({ min: 5 })
     .withMessage(`Description must be at least 5 character long`)
-    .isLength({ max: 100 })
-    .withMessage(`Description must less 50 character long`),
+    .isLength({ max: 255 })
+    .withMessage(`Description must less 255 character long`),
   async (req, res) => {
     const home = reqBodyToObject(req)
 
@@ -81,21 +94,31 @@ router.delete('/', async (req, res) => {
 //Update home
 router.put(
   '/',
-  body('name')
+  body('title')
     .isLength({ min: 3 })
-    .withMessage('Property name must be at least 3 charaters long')
+    .withMessage('Property title must be at least 3 charaters long')
     .isLength({ max: 100 })
-    .withMessage('Property name must be less 10 charaters long'),
-  body('place')
+    .withMessage('Property title must be less 100 charaters long'),
+  body('city')
     .isLength({ min: 3 })
-    .withMessage('Place name must be at least 3 charaters long')
+    .withMessage('City must be at least 3 charaters long')
     .isLength({ max: 100 })
-    .withMessage('Place name must be less 12 charaters long'),
+    .withMessage('City must be less 100 charaters long'),
+  body('neighborhood')
+    .isLength({ min: 3 })
+    .withMessage('Neighborhood must be at least 3 charaters long')
+    .isLength({ max: 100 })
+    .withMessage('Neighborhood must be less 100 charaters long'),
+  body('address')
+    .isLength({ min: 3 })
+    .withMessage('Address must be at least 3 charaters long')
+    .isLength({ max: 255 })
+    .withMessage('Address must be less 255 charaters long'),
   body('description')
     .isLength({ min: 5 })
     .withMessage(`Description must be at least 5 character long`)
-    .isLength({ max: 150 })
-    .withMessage(`Description must less 50 character long`),
+    .isLength({ max: 255 })
+    .withMessage(`Description must less 255 character long`),
   async (req, res) => {
     const homeId = req.body.home_id;
     if (!isValidObjectId(homeId)) {
