@@ -1,4 +1,5 @@
 const Land = require("../models/Land");
+const User = require("../models/User");
 
 async function createLand(land) {
     const createdLand = new Land(land)
@@ -7,7 +8,15 @@ async function createLand(land) {
 }
 
 async function getLandById(landId) {
-    return Land.findById(landId)
+    const land = await Land.findById(landId)
+    const ownerId = land.owner.toString()
+    const owner = await User.findById(ownerId)
+    const ownerNames = `${owner.first_name} ${owner.last_name}`
+    const landInfo = {
+        owner_names: ownerNames,
+        ...land._doc
+    }
+    return landInfo
 }
 
 async function deleteLand(landId) {
