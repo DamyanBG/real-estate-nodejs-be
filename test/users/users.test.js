@@ -63,8 +63,8 @@ describe('GET /users/roleUsers', () => {
     });
 });
 
-describe('GET /users/roleBrokers', () => {
-    it('should get all users with role broker', async () => {
+describe('GET /users/roleSellers', () => {
+    it('should get all users with role seller', async () => {
         mockingoose(User).toReturn(
             [
                 {
@@ -72,7 +72,7 @@ describe('GET /users/roleBrokers', () => {
                     last_name: 'Doe',
                     email: 'mail@abv.bg',
                     phone_number: '34343434',
-                    role: 'broker',
+                    role: 'seller',
                     password: '123admin435',
                 },
                 {
@@ -80,7 +80,7 @@ describe('GET /users/roleBrokers', () => {
                     last_name: 'Doe',
                     email: 'petar@abv.bg',
                     phone_number: '34343434',
-                    role: 'broker',
+                    role: 'seller',
                     password: '123admin435',
                 },
                 {
@@ -88,13 +88,13 @@ describe('GET /users/roleBrokers', () => {
                     last_name: 'Doe',
                     email: 'stefan@abv.bg',
                     phone_number: '34343434',
-                    role: 'broker',
+                    role: 'seller',
                     password: '123admin435',
                 },
             ],
             'find'
         );
-        const res = await request(app).get('/users/roleBrokers');
+        const res = await request(app).get('/users/roleSellers');
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.length).toEqual(3);
@@ -102,7 +102,7 @@ describe('GET /users/roleBrokers', () => {
 });
 
 describe('GET /users/roleAdmins', () => {
-    it('should get all users with role broker', async () => {
+    it('should get all users with role admin', async () => {
         mockingoose(User).toReturn(
             [
                 {

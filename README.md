@@ -1,5 +1,5 @@
 Me and my coding buddy Tihomir are making Real Estate Application. The idea behind this application is to make application where 
-users and brokers can meet. We want to train our coding skills. Here we are writing the back end of the application, using NodeJS and ExpressJS.
+users and sellers can meet. We want to train our coding skills. Here we are writing the back end of the application, using NodeJS and ExpressJS.
 
 You can start the project on local with few easy steps:
 
