@@ -19,7 +19,7 @@ describe('Positive PUT /home', () => {
                 description: 'Really nice house, have 2 rooms',
                 longitude: '30',
                 latitude: '50',
-                owner: '632beab54298559b57ff172f',
+                owner_id: '632beab54298559b57ff172f',
                 homeViews: '200',
             },
             'findOne'
@@ -36,7 +36,7 @@ describe('Positive PUT /home', () => {
                 description: 'Really nice house, have 2 rooms, updated',
                 longitude: '32',
                 latitude: '52',
-                owner: '632beab54298559b57ff172f',
+                owner_id: '632beab54298559b57ff172f',
             },
             'save'
         );
@@ -55,7 +55,7 @@ describe('Positive PUT /home', () => {
             description: 'Really nice house, have 2 rooms, updated',
             longitude: '32',
             latitude: '52',
-            owner: '632beab54298559b57ff172f',
+            owner_id: '632beab54298559b57ff172f',
         });
         expect(res.status).toEqual(200);
         expect(res.body.title).toEqual('Nice house Updated');

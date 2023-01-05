@@ -31,7 +31,7 @@ describe('Positive GET /home', () => {
                 description: 'Really nice house, have 2 rooms',
                 longitude: '30',
                 latitude: '50',
-                owner: '632beab54298559b57ff172f',
+                owner_id: '632beab54298559b57ff172f',
                 homeViews: '200',
             },
             'findOne'
@@ -49,7 +49,7 @@ describe('Positive GET /home', () => {
                 description: 'Really nice house, have 2 rooms',
                 longitude: '30',
                 latitude: '50',
-                owner: '632beab54298559b57ff172f',
+                owner_id: '632beab54298559b57ff172f',
                 homeViews: '200',
             },
             'save'
