@@ -18,6 +18,9 @@ console.log(CONTAINER_NAME);
 router.post("/", uploadStrategy, (req, res) => {
   const fileName = req.file.originalname
   const homeId = req.body.home_id
+
+  if (!fileName || !homeId) return res.status(400).json("Bad Request!")
+
   const blobName = `${homeId}/${fileName}`;
   
   const blobService = new BlockBlobClient(
