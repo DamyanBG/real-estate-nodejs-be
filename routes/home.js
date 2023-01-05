@@ -14,7 +14,7 @@ const reqBodyToObject = (req) => ({
   description: req.body.description,
   longitude: req.body.longitude,
   latitude: req.body.latitude,
-  owner: req.body.owner
+  owner_id: req.body.owner_id
 });
 
 //Create home
@@ -48,6 +48,8 @@ router.post(
   async (req, res) => {
     const home = reqBodyToObject(req)
 
+    if (!home.owner_id) return res.status(400).json("No owner id")
+
     const { errors } = validationResult(req);
     if (errors.length > 0) {
       res.status(400).json(errors);
@@ -62,7 +64,7 @@ router.post(
 //Get home
 router.get('/:home_id', async (req, res) => {
   const homeId = req.params.home_id;
-  console.log(homeId, "homeId from router")
+  
   if (!isValidObjectId(homeId)) {
     res.status(400).json('Invalid home id!');
     return;

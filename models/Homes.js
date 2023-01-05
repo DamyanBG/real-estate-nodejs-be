@@ -50,10 +50,10 @@ const homesSchema = new Schema({
         type: String,
         max: 30
     },
-    owner: {
+    owner_id: {
         type: ObjectId,
         ref: "User",
-        require: true
+        required: true
     },
     homeViews: {
         type: Number,
