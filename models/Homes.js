@@ -59,6 +59,9 @@ const homesSchema = new Schema({
         type: Number,
         default: 0
     },
+    photo_name: {
+        type: String,
+    },
 });
 
 const Homes = model("Homes", homesSchema);

@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const router = require('express').Router();
 const { isValidObjectId } = require('mongoose');
 const { createHome, getHomeById, deleteHome, updateHome } = require('../services/homeService');
@@ -77,7 +81,16 @@ router.get('/:home_id', async (req, res) => {
     return;
   }
 
-  res.status(200).json(home);
+  const homeInfo = home._doc
+  const blobStorageUrl = process.env.AZURE_FILES_STORAGE_ACCOUNT_URL
+  const CONTAINER_NAME = process.env.CONTAINER_NAME;
+
+  const homeResponse = {
+    photo_url: `${blobStorageUrl}/${CONTAINER_NAME}/${homeInfo._id}/${homeInfo.photo_name}`,
+    ...homeInfo
+  }
+
+  res.status(200).json(homeResponse);
   return;
 });
 
