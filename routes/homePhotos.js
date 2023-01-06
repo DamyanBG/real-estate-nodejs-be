@@ -9,11 +9,10 @@ const inMemoryStorage = multer.memoryStorage();
 const uploadStrategy = multer({ storage: inMemoryStorage }).single("photo");
 const { BlockBlobClient } = require("@azure/storage-blob");
 const getStream = require("into-stream");
+const { addPhotoName } = require("../services/homeService")
 
 const CONTAINER_NAME = process.env.CONTAINER_NAME;
 const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING
-
-console.log(CONTAINER_NAME);
   
 router.post("/", uploadStrategy, (req, res) => {
   const fileName = req.file.originalname
@@ -36,6 +35,7 @@ router.post("/", uploadStrategy, (req, res) => {
   };
 
   const handleSucess = () => {
+    addPhotoName(homeId, fileName)
     res.status(201).json("OK");
   };
 

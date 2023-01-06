@@ -39,10 +39,19 @@ async function deleteHome(homeId) {
   await Homes.findByIdAndDelete(homeId);
 }
 
+async function addPhotoName(homeId, photoName) {
+  const existing = await Homes.findById(homeId);
+
+  existing.photo_name = photoName
+  await existing.save();
+  return existing;
+}
+
 module.exports = {
   getAllHomes,
   getHomeById,
   createHome,
   updateHome,
   deleteHome,
+  addPhotoName,
 };
