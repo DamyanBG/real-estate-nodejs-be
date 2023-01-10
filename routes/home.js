@@ -74,14 +74,13 @@ router.get('/:home_id', async (req, res) => {
     return;
   }
 
-  const home = await getHomeById(homeId);
+  const homeInfo = await getHomeById(homeId);
 
-  if (!home) {
+  if (!homeInfo) {
     res.status(404).send('Home with this id do not exists');
     return;
   }
 
-  const homeInfo = home._doc
   const blobStorageUrl = process.env.AZURE_FILES_STORAGE_ACCOUNT_URL
   const CONTAINER_NAME = process.env.CONTAINER_NAME;
 
