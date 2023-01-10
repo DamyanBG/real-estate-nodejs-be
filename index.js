@@ -15,27 +15,27 @@ import authRoutes from './routes/auth.js';
 import visitationRoute from './routes/visitation.js';
 import meetingRoute from './routes/meeting.js';
 
-start();
-
 async function start() {
-  const app = express();
-  await databaseConfig(app);
-  expressConfig(app);
+    const app = express();
+    await databaseConfig(app);
+    expressConfig(app);
 
-  app.use('/users', usersRoute);
-  app.use('/user', userRoute);
-  app.use('/homes', homesRoute);
-  app.use('/home', homeRoute);
-  app.use('/home-photos', homePhotosRoute);
-  app.use('/works', worksRoute);
-  app.use('/land', landRoute);
-  app.use('/message', messageRoute);
-  app.use('/email', emailRoute);
-  app.use('/news', newsRoute);
-  app.use('/auth', authRoutes);
-  app.use('/visitation', visitationRoute);
-  app.use('/meetings', meetingRoute);
+    app.use('/users', usersRoute);
+    app.use('/user', userRoute);
+    app.use('/homes', homesRoute);
+    app.use('/home', homeRoute);
+    app.use('/home-photos', homePhotosRoute);
+    app.use('/works', worksRoute);
+    app.use('/land', landRoute);
+    app.use('/message', messageRoute);
+    app.use('/email', emailRoute);
+    app.use('/news', newsRoute);
+    app.use('/auth', authRoutes);
+    app.use('/visitation', visitationRoute);
+    app.use('/meetings', meetingRoute);
 
-  const PORT = process.env.PORT || 3030;
-  app.listen(PORT, () => console.log(`Server listen on port 3030`));
+    const PORT = process.env.PORT || 3030;
+    app.listen(PORT, () => console.log('Server listen on port 3030'));
 }
+
+start();

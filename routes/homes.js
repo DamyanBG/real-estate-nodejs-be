@@ -5,8 +5,8 @@ const router = express.Router();
 
 //Get all homes
 router.get('/', async (req, res) => {
-  const homes = await getAllHomes();
-  res.status(200).json(homes);
+    const homes = await getAllHomes();
+    res.status(200).json(homes);
 });
 
 export default router;

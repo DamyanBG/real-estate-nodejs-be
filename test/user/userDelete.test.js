@@ -1,7 +1,7 @@
-const mockingoose = require('mockingoose');
-const User = require('../../models/User');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import User from '../../models/User.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive DELETE /user', () => {
     it('should delete user by id', async () => {
@@ -29,7 +29,9 @@ describe('Positive DELETE /user', () => {
             },
             'deleteOne'
         );
-        const res = await request(app).delete(`/user`).send({user_id: "632beab54298559b57ff172f"});
+        const res = await request(app)
+            .delete(`/user`)
+            .send({ user_id: '632beab54298559b57ff172f' });
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual('Account has been deleted');

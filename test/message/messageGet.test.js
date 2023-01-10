@@ -1,7 +1,7 @@
-const mockingoose = require('mockingoose');
-const Message = require('../../models/Message');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import Message from '../../models/Message.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive GET /message', () => {
     it('should get messages for a conversation between two users', async () => {
@@ -64,7 +64,9 @@ describe('Positive GET /message', () => {
             ],
             'find({sender_id: "63aca8c7826cd2f2bfda5915", receiver_id: "63aca8c7826cd2f2bfda5919"})'
         );
-        const res = await request(app).get(`/message/63aca8c7826cd2f2bfda5915&63aca8c7826cd2f2bfda5919`);
+        const res = await request(app).get(
+            `/message/63aca8c7826cd2f2bfda5915&63aca8c7826cd2f2bfda5919`
+        );
 
         expect(res.statusCode).toEqual(200);
     });

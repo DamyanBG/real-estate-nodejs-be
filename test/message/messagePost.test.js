@@ -1,7 +1,7 @@
-const request = require('supertest');
-const Message = require('../../models/Message');
-const mockingoose = require('mockingoose');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import Message from '../../models/Message.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive POST /message', () => {
     beforeEach(() => {

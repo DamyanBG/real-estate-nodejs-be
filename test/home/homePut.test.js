@@ -1,7 +1,7 @@
-const mockingoose = require('mockingoose');
-const Homes = require('../../models/Homes');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import Homes from '../../models/Homes.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive PUT /home', () => {
     beforeEach(() => {

@@ -1,8 +1,8 @@
-const mockingoose = require('mockingoose');
-const Homes = require('../../models/Homes');
-const User = require('../../models/User');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import Homes from '../../models/Homes.js';
+import User from '../../models/User.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive GET /home', () => {
     it('should get home by id', async () => {
@@ -27,10 +27,10 @@ describe('Positive GET /home', () => {
                 size: '150',
                 year: '1960',
                 description: 'Really nice house, have 2 rooms',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
-                homeViews: "200",
+                owner: '632beab54298559b57ff172f',
+                homeViews: '200',
             },
             'findOne'
         );
@@ -43,16 +43,15 @@ describe('Positive GET /home', () => {
                 size: '150',
                 year: '1960',
                 description: 'Really nice house, have 2 rooms',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
-                homeViews: "200",
+                owner: '632beab54298559b57ff172f',
+                homeViews: '200',
             },
             'save'
         );
         const res = await request(app).get(`/home/652beab54298559b57ff172f`);
 
         expect(res.statusCode).toEqual(200);
-        
     });
 });

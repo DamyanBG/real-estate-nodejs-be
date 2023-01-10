@@ -1,7 +1,7 @@
-const mockingoose = require('mockingoose');
-const Homes = require('../../models/Homes');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import Homes from '../../models/Homes.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive DELETE /home', () => {
     it('should delete home by id', async () => {
@@ -14,10 +14,10 @@ describe('Positive DELETE /home', () => {
                 size: '150',
                 year: '1960',
                 description: 'Really nice house, have 2 rooms',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
-                homeViews: "200",
+                owner: '632beab54298559b57ff172f',
+                homeViews: '200',
             },
             'findOne'
         );
@@ -30,14 +30,16 @@ describe('Positive DELETE /home', () => {
                 size: '150',
                 year: '1960',
                 description: 'Really nice house, have 2 rooms',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
-                homeViews: "200",
+                owner: '632beab54298559b57ff172f',
+                homeViews: '200',
             },
             'findByIdAndDelete'
         );
-        const res = await request(app).delete(`/home`).send({home_id: "652beab54298559b57ff172f"});
+        const res = await request(app)
+            .delete(`/home`)
+            .send({ home_id: '652beab54298559b57ff172f' });
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual('Home has been deleted');

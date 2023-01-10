@@ -1,7 +1,7 @@
-const mockingoose = require('mockingoose');
-const User = require('../../models/User');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import User from '../../models/User.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive GET /user', () => {
     it('should get user by id', async () => {

@@ -1,7 +1,7 @@
-const request = require('supertest');
-const User = require('../../models/User');
-const mockingoose = require('mockingoose');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import User from '../../models/User.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive PATCH /user/profile', () => {
     beforeEach(() => {

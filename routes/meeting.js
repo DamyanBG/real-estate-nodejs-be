@@ -2,108 +2,108 @@ import express from 'express';
 const router = express.Router();
 import { isValidObjectId } from 'mongoose';
 import {
-  createMeeting,
-  getMeetingById,
-  deleteMeeting,
-  updateMeeting,
-  updateStatusMeetings,
+    createMeeting,
+    getMeetingById,
+    deleteMeeting,
+    updateMeeting,
+    updateStatusMeetings,
 } from '../services/meetingsService.js';
 import { STATUS_ENUMS } from '../util/enums.js';
 
 const reqBodyToObject = (req) => ({
-  start_date: req.body.start_date,
-  end_date: req.body.end_date,
-  invitor_id: req.body.invitor_id,
-  invited_id: req.body.invited_id,
-  status: req.body.status,
+    start_date: req.body.start_date,
+    end_date: req.body.end_date,
+    invitor_id: req.body.invitor_id,
+    invited_id: req.body.invited_id,
+    status: req.body.status,
 });
 
 router.post('/', async (req, res) => {
-  const meetingInfo = reqBodyToObject(req);
+    const meetingInfo = reqBodyToObject(req);
 
-  if (!isValidObjectId(meetingInfo.invitor_id)) {
-    res.status(400).json('Invalid invitor id!');
-    return;
-  }
-  if (!isValidObjectId(meetingInfo.invited_id)) {
-    res.status(400).json('Invalid invited id!');
-    return;
-  }
+    if (!isValidObjectId(meetingInfo.invitor_id)) {
+        res.status(400).json('Invalid invitor id!');
+        return;
+    }
+    if (!isValidObjectId(meetingInfo.invited_id)) {
+        res.status(400).json('Invalid invited id!');
+        return;
+    }
 
-  const newMeeting = await createMeeting(meetingInfo);
-  return res.status(201).json(newMeeting);
+    const newMeeting = await createMeeting(meetingInfo);
+    return res.status(201).json(newMeeting);
 });
 
 router.get('/', async (req, res) => {
-  const meetingId = req.params.meeting_id;
-  if (!isValidObjectId(meetingId)) {
-    res.status(400).json('Invalid meeting id!');
-    return;
-  }
+    const meetingId = req.params.meeting_id;
+    if (!isValidObjectId(meetingId)) {
+        res.status(400).json('Invalid meeting id!');
+        return;
+    }
 
-  const meeting = await getMeetingById(meetingId);
-  if (!meeting) {
-    res.status(404).send('Meeting with this id do not exists');
+    const meeting = await getMeetingById(meetingId);
+    if (!meeting) {
+        res.status(404).send('Meeting with this id do not exists');
+        return;
+    }
+    res.status(200).json(meeting);
     return;
-  }
-  res.status(200).json(meeting);
-  return;
 });
 
 router.delete('/', async (req, res) => {
-  const meetingId = req.body.meeting_id;
-  if (!isValidObjectId(meetingId)) {
-    res.status(400).json('Invalid meeting id!');
-    return;
-  }
-  try {
-    await deleteMeeting(req.body.meeting_id);
-    res.status(200).json('Meeting is deleted');
-  } catch (err) {
-    return res.status(400).json(err);
-  }
+    const meetingId = req.body.meeting_id;
+    if (!isValidObjectId(meetingId)) {
+        res.status(400).json('Invalid meeting id!');
+        return;
+    }
+    try {
+        await deleteMeeting(req.body.meeting_id);
+        res.status(200).json('Meeting is deleted');
+    } catch (err) {
+        return res.status(400).json(err);
+    }
 });
 
 router.put('/', async (req, res) => {
-  const meetingId = req.body.meeting_id;
+    const meetingId = req.body.meeting_id;
 
-  if (!isValidObjectId(meetingId)) {
-    res.status(400).json('Invalid meeting id!');
-    return;
-  }
+    if (!isValidObjectId(meetingId)) {
+        res.status(400).json('Invalid meeting id!');
+        return;
+    }
 
-  const meetingInfo = reqBodyToObject(req);
+    const meetingInfo = reqBodyToObject(req);
 
-  if (!isValidObjectId(meetingInfo.invitor_id)) {
-    res.status(400).json('Invalid invitor id!');
-    return;
-  }
+    if (!isValidObjectId(meetingInfo.invitor_id)) {
+        res.status(400).json('Invalid invitor id!');
+        return;
+    }
 
-  if (!isValidObjectId(meetingInfo.invited_id)) {
-    res.status(400).json('Invalid invited id!');
-    return;
-  }
+    if (!isValidObjectId(meetingInfo.invited_id)) {
+        res.status(400).json('Invalid invited id!');
+        return;
+    }
 
-  console.log(meetingInfo, 'meeting infoto');
-  const newMeeting = await updateMeeting(meetingInfo);
-  return res.status(200).json(newMeeting);
+    console.log(meetingInfo, 'meeting infoto');
+    const newMeeting = await updateMeeting(meetingInfo);
+    return res.status(200).json(newMeeting);
 });
 
 router.patch('/', async (req, res) => {
-  const meetingId = req.body.meeting_id;
-  const meetingStatus = req.body.status;
+    const meetingId = req.body.meeting_id;
+    const meetingStatus = req.body.status;
 
-  if (!STATUS_ENUMS.includes(meetingStatus)) {
-    res.status(400).json('Invalid status!');
-    return;
-  }
+    if (!STATUS_ENUMS.includes(meetingStatus)) {
+        res.status(400).json('Invalid status!');
+        return;
+    }
 
-  if (!isValidObjectId(meetingId)) {
-    res.status(400).json('Invalid meeting id!');
-    return;
-  }
+    if (!isValidObjectId(meetingId)) {
+        res.status(400).json('Invalid meeting id!');
+        return;
+    }
 
-  const newMeetingStatus = await updateStatusMeetings(meetingId, meetingStatus);
-  return res.status(200).json(newMeetingStatus);
+    const newMeetingStatus = await updateStatusMeetings(meetingId, meetingStatus);
+    return res.status(200).json(newMeetingStatus);
 });
 export default router;

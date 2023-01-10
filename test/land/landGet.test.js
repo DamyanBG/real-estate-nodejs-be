@@ -1,8 +1,8 @@
-const mockingoose = require('mockingoose');
-const Land = require('../../models/Land');
-const User = require('../../models/User');
-const request = require('supertest');
-const app = require('../../app');
+import mockingoose from 'mockingoose';
+import Land from '../../models/Land.js';
+import User from '../../models/User.js';
+import request from 'supertest';
+import app from '../../app.js';
 
 describe('Positive GET /land', () => {
     it('should get land by id', async () => {
@@ -26,9 +26,9 @@ describe('Positive GET /land', () => {
                 price: '100000',
                 size: '150',
                 description: 'Zemedelska zemq purva kategoriq. W blizost do ezero.',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
+                owner: '632beab54298559b57ff172f',
             },
             'findOne'
         );
@@ -40,15 +40,14 @@ describe('Positive GET /land', () => {
                 price: '100000',
                 size: '150',
                 description: 'Zemedelska zemq purva kategoriq. W blizost do ezero.',
-                longitude: "30",
+                longitude: '30',
                 latitude: '50',
-                owner: "632beab54298559b57ff172f",
+                owner: '632beab54298559b57ff172f',
             },
             'save'
         );
         const res = await request(app).get(`/land/652beab54298559b57ff172f`);
 
         expect(res.statusCode).toEqual(200);
-        
     });
 });
