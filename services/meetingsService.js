@@ -1,14 +1,14 @@
-const Meetings = require("../models/Meetings");
+const Meetings = require('../models/Meetings');
 
-async function createMeeting(meeting) {
-    const createMmeeting = new Meetings(meeting)
-    createMeeting.status = "pending";
-    await createMmeeting.save()
-    return createMmeeting
+async function insertMeeting(meeting) {
+    const createMmeeting = new Meetings(meeting);
+    createMmeeting.status = 'pending';
+    await createMmeeting.save();
+    return createMmeeting;
 }
 
-async function getMeetingById(meeting_id){
-   return Meetings.findById(meeting_id);
+async function getMeetingById(meeting_id) {
+    return Meetings.findById(meeting_id);
 }
 
 async function updateMeeting(meetingId, meeting) {
@@ -34,14 +34,19 @@ async function updateStatusMeetings(meetingId, meetingStatus) {
 }
 
 async function deleteMeeting(meetingId) {
-    const meeting = await Meetings.findByIdAndDelete(meetingId);   
-    await meeting.save();
+    await Meetings.findByIdAndDelete(meetingId);
+}
+
+async function selectUserMeetings(userId) {
+    const meetings = await Meetings.find({ $or: [{ invitor_id: userId }, { invited_id: userId }] });
+    return meetings
 }
 
 module.exports = {
-    createMeeting,
+    insertMeeting,
     getMeetingById,
     updateStatusMeetings,
     deleteMeeting,
-    updateMeeting
-}
+    updateMeeting,
+    selectUserMeetings,
+};
