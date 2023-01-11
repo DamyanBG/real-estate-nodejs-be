@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { isValidObjectId } = require("mongoose");
 const { body, validationResult } = require("express-validator");
-const { createMessage, queryReceivedMessages, querySentMessages } = require("../services/messageService");
+const { createMessage, queryReceivedMessages, querySentMessages, queryInterlocutors } = require("../services/messageService");
 
 const reqBodyToObject = (req) => ({
   sender_id: req.body.sender_id,
@@ -50,5 +50,15 @@ router.get("/:user_id&:interlocutor_id", async (req, res) => {
   }
   res.status(200).json(messages);
 });
+
+router.get("/history/:user_id", async (req, res) => {
+  const userId = req.params.user_id;
+  if (!isValidObjectId(userId)) {
+    res.status(400).json("Invalid sender or receiver!");
+    return;
+  }
+  const interlocutors = await queryInterlocutors(userId)
+  res.status(200).json({interlocutors: interlocutors});
+})
 
 module.exports = router;
