@@ -81,6 +81,7 @@ async function updateUserEmail(userId, email) {
 
 async function queryUserNames(userId) {
     const namesResult = await User.findById(userId).select(['first_name', 'last_name']);
+    if (!namesResult) return 'Deleted user';
     const userNames = `${namesResult.first_name} ${namesResult.last_name}`;
     return userNames;
 }
