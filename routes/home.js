@@ -6,6 +6,15 @@ const router = require('express').Router();
 const { isValidObjectId } = require('mongoose');
 const { createHome, getHomeById, deleteHome, updateHome } = require('../services/homeService');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+const inMemoryStorage = multer.memoryStorage();
+const uploadStrategy = multer({ storage: inMemoryStorage }).single('photo');
+const { BlockBlobClient } = require('@azure/storage-blob');
+const getStream = require('into-stream');
+const { addPhotoName } = require('../services/homeService');
+
+const CONTAINER_NAME = process.env.CONTAINER_NAME;
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
 const reqBodyToObject = (req) => ({
     title: req.body.title,
@@ -24,6 +33,7 @@ const reqBodyToObject = (req) => ({
 //Create home
 router.post(
     '/',
+    uploadStrategy,
     body('title')
         .isLength({ min: 3 })
         .withMessage('Property title must be at least 3 charaters long')
@@ -64,6 +74,44 @@ router.post(
         }
 
         const newHome = await createHome(home);
+
+        if (req.file) {
+            const fileName = req.file.originalname;
+            const blobName = `${newHome._id}/${fileName}`;
+
+            const blobService = new BlockBlobClient(
+                AZURE_STORAGE_CONNECTION_STRING,
+                CONTAINER_NAME,
+                blobName
+            );
+            const stream = getStream(req.file.buffer);
+            const streamLength = req.file.buffer.length;
+
+            const handleError = () => {
+                console.log('Error uploading photo!');
+            };
+
+            const handleSucess = async () => {
+                await addPhotoName(newHome._id, fileName);
+            };
+
+            await blobService
+                .uploadStream(stream, streamLength)
+                .then(async () => {
+                    console.log('success');
+                    await handleSucess();
+                    return;
+                })
+                .catch((err) => {
+                    console.log('error');
+                    if (err) {
+                        console.log(err);
+                        handleError();
+                        return;
+                    }
+                });
+        }
+
         return res.status(201).json(newHome);
     }
 );
