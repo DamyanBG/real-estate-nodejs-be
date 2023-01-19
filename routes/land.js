@@ -69,6 +69,7 @@ router.get('/:land_id', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
+    // Land Id
     const landId = req.body.land_id;
     if (!isValidObjectId(landId)) {
         res.status(400).json('Invalid land id!');
