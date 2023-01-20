@@ -1,5 +1,5 @@
 const Homes = require('../models/Homes');
-const User = require("../models/User");
+const User = require('../models/User');
 
 async function getAllHomes() {
     return Homes.find({});
@@ -7,6 +7,7 @@ async function getAllHomes() {
 
 async function getHomeById(id) {
     const home = await Homes.findById(id);
+    if (!home) return null;
     home.homeViews++;
     await home.save();
     const ownerId = home.owner_id.toString();
@@ -56,6 +57,12 @@ async function addPhotoName(homeId, photoName) {
     return existing;
 }
 
+async function isHomeBelongToOwner(homeId, ownerid) {
+    const home = await Homes.findById(homeId);
+    if (!home) return false;
+    return ownerid === home.owner_id.toString();
+}
+
 module.exports = {
     getAllHomes,
     getHomeById,
@@ -63,4 +70,5 @@ module.exports = {
     updateHome,
     deleteHome,
     addPhotoName,
+    isHomeBelongToOwner,
 };
