@@ -1,7 +1,16 @@
 const router = require('express').Router();
 const { isValidObjectId } = require('mongoose');
 const { body, validationResult } = require('express-validator');
-const { createLand, getLandById, deleteLand, updateLand } = require('../services/landService');
+const {
+    createLand,
+    getLandById,
+    deleteLand,
+    updateLand,
+    isLandBelongToOwner,
+} = require('../services/landService');
+const verifyToken = require('../middlewares/verifyToken');
+const verifyRole = require('../middlewares/verifyRole');
+const { ROLES_ENUMS } = require('../util/enums');
 
 const reqBodyToObject = (req) => ({
     name: req.body.name,
@@ -13,6 +22,24 @@ const reqBodyToObject = (req) => ({
     longitude: req.body.longitude,
     latitude: req.body.latitude,
 });
+router.get('/:land_id', async (req, res) => {
+    const landId = req.params.land_id;
+    if (!isValidObjectId(landId)) {
+        res.status(400).json('Invalid land id!');
+        return;
+    }
+
+    const land = await getLandById(landId);
+    if (!land) {
+        res.status(404).send('Land with this id do not exists');
+        return;
+    }
+    res.status(200).json(land);
+    return;
+});
+
+//Verify token in every request
+router.use(verifyToken);
 
 router.post(
     '/',
@@ -33,6 +60,7 @@ router.post(
         .withMessage(`Description must be at least 5 character long`)
         .isLength({ max: 150 })
         .withMessage(`Description must less 150 character long`),
+    verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -52,27 +80,19 @@ router.post(
     }
 );
 
-router.get('/:land_id', async (req, res) => {
-    const landId = req.params.land_id;
-    if (!isValidObjectId(landId)) {
-        res.status(400).json('Invalid land id!');
-        return;
-    }
-
-    const land = await getLandById(landId);
-    if (!land) {
-        res.status(404).send('Land with this id do not exists');
-        return;
-    }
-    res.status(200).json(land);
-    return;
-});
-
-router.delete('/', async (req, res) => {
+router.delete('/', verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]), async (req, res) => {
     // Land Id
     const landId = req.body.land_id;
     if (!isValidObjectId(landId)) {
         res.status(400).json('Invalid land id!');
+        return;
+    }
+    if (!(await getLandById(landId))) {
+        res.status(400).json('Land not found!');
+        return;
+    }
+    if (!(await isLandBelongToOwner(landId, req.auth_id)) && req.auth_role !== ROLES_ENUMS.Admin) {
+        res.status(403).json('You do not have permission to delete this land!');
         return;
     }
     try {
@@ -102,6 +122,7 @@ router.put(
         .withMessage(`Description must be at least 5 character long`)
         .isLength({ max: 150 })
         .withMessage(`Description must less 150 character long`),
+    verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]),
     async (req, res) => {
         const landId = req.body.land_id;
         if (!isValidObjectId(landId)) {
@@ -116,6 +137,14 @@ router.put(
 
         if (!isValidObjectId(landInfo.owner)) {
             res.status(400).json('Invalid owner id!');
+            return;
+        }
+
+        if (
+            !(await isLandBelongToOwner(landId, req.auth_id)) &&
+            req.auth_role !== ROLES_ENUMS.Admin
+        ) {
+            res.status(403).json('You do not have permission to delete this land!');
             return;
         }
 

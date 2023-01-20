@@ -1,5 +1,8 @@
 const router = require('express').Router();
+const verifyToken = require('../middlewares/verifyToken');
 const { getAllLands } = require('../services/landService');
+
+router.use(verifyToken);
 
 //Get all lands
 router.get('/', async (req, res) => {

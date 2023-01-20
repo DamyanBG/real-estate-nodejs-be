@@ -1,26 +1,27 @@
-const Land = require("../models/Land");
-const User = require("../models/User");
+const Land = require('../models/Land');
+const User = require('../models/User');
 
 async function createLand(land) {
-    const createdLand = new Land(land)
-    await createdLand.save()
-    return createdLand
+    const createdLand = new Land(land);
+    await createdLand.save();
+    return createdLand;
 }
 
 async function getLandById(landId) {
-    const land = await Land.findById(landId)
-    const ownerId = land.owner.toString()
-    const owner = await User.findById(ownerId)
-    const ownerNames = `${owner.first_name} ${owner.last_name}`
+    const land = await Land.findById(landId);
+    if (!land) return null;
+    const ownerId = land.owner.toString();
+    const owner = await User.findById(ownerId);
+    const ownerNames = `${owner.first_name} ${owner.last_name}`;
     const landInfo = {
         owner_names: ownerNames,
-        ...land._doc
-    }
-    return landInfo
+        ...land._doc,
+    };
+    return landInfo;
 }
 
 async function deleteLand(landId) {
-    await Land.findByIdAndDelete(landId);   
+    await Land.findByIdAndDelete(landId);
 }
 
 async function updateLand(landId, land) {
@@ -41,7 +42,13 @@ async function updateLand(landId, land) {
 
 async function getAllLands() {
     return Land.find({});
-  }
+}
+
+async function isLandBelongToOwner(landId, ownerid) {
+    const land = await Land.findById(landId);
+    if (!land) return false;
+    return ownerid === land.owner.toString();
+}
 
 module.exports = {
     createLand,
@@ -49,4 +56,5 @@ module.exports = {
     deleteLand,
     updateLand,
     getAllLands,
-}
+    isLandBelongToOwner,
+};
