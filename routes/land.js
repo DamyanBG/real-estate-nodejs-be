@@ -144,7 +144,7 @@ router.put(
             !(await isLandBelongToOwner(landId, req.auth_id)) &&
             req.auth_role !== ROLES_ENUMS.Admin
         ) {
-            res.status(403).json('You do not have permission to delete this land!');
+            res.status(403).json('You do not have permission to Edit this land!');
             return;
         }
 
