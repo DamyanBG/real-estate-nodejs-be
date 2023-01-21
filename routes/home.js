@@ -4,8 +4,19 @@ if (process.env.NODE_ENV !== 'production') {
 
 const router = require('express').Router();
 const { isValidObjectId } = require('mongoose');
-const { createHome, getHomeById, deleteHome, updateHome } = require('../services/homeService');
+const {
+    createHome,
+    getHomeById,
+    deleteHome,
+    updateHome,
+    isHomeBelongToOwner,
+} = require('../services/homeService');
 const { body, validationResult } = require('express-validator');
+
+const verifyToken = require('../middlewares/verifyToken');
+const verifyRole = require('../middlewares/verifyRole');
+const { ROLES_ENUMS } = require('../util/enums');
+
 const multer = require('multer');
 const inMemoryStorage = multer.memoryStorage();
 const uploadStrategy = multer({ storage: inMemoryStorage }).single('photo');
@@ -15,6 +26,7 @@ const { addPhotoName } = require('../services/homeService');
 
 const CONTAINER_NAME = process.env.CONTAINER_NAME;
 const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
+
 
 const reqBodyToObject = (req) => ({
     title: req.body.title,
@@ -29,6 +41,36 @@ const reqBodyToObject = (req) => ({
     latitude: req.body.latitude,
     owner_id: req.body.owner_id,
 });
+//Get home
+router.get('/:home_id', async (req, res) => {
+    const homeId = req.params.home_id;
+
+    if (!isValidObjectId(homeId)) {
+        res.status(400).json('Invalid home id!');
+        return;
+    }
+
+    const homeInfo = await getHomeById(homeId);
+
+    if (!homeInfo) {
+        res.status(404).send('Home with this id do not exists');
+        return;
+    }
+
+    const blobStorageUrl = process.env.AZURE_FILES_STORAGE_ACCOUNT_URL;
+    const CONTAINER_NAME = process.env.CONTAINER_NAME;
+
+    const homeResponse = {
+        photo_url: `${blobStorageUrl}/${CONTAINER_NAME}/${homeInfo._id}/${homeInfo.photo_name}`,
+        ...homeInfo,
+    };
+
+    res.status(200).json(homeResponse);
+    return;
+});
+
+//Verify token in every request
+router.use(verifyToken);
 
 //Create home
 router.post(
@@ -59,6 +101,7 @@ router.post(
         .withMessage(`Description must be at least 5 character long`)
         .isLength({ max: 255 })
         .withMessage(`Description must less 255 character long`),
+    verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]),
     async (req, res) => {
         const home = reqBodyToObject(req);
 
@@ -116,39 +159,20 @@ router.post(
     }
 );
 
-//Get home
-router.get('/:home_id', async (req, res) => {
-    const homeId = req.params.home_id;
-
-    if (!isValidObjectId(homeId)) {
-        res.status(400).json('Invalid home id!');
-        return;
-    }
-
-    const homeInfo = await getHomeById(homeId);
-
-    if (!homeInfo) {
-        res.status(404).send('Home with this id do not exists');
-        return;
-    }
-
-    const blobStorageUrl = process.env.AZURE_FILES_STORAGE_ACCOUNT_URL;
-    const CONTAINER_NAME = process.env.CONTAINER_NAME;
-
-    const homeResponse = {
-        photo_url: `${blobStorageUrl}/${CONTAINER_NAME}/${homeInfo._id}/${homeInfo.photo_name}`,
-        ...homeInfo,
-    };
-
-    res.status(200).json(homeResponse);
-    return;
-});
-
 //Delete home
-router.delete('/', async (req, res) => {
+router.delete('/', verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]), async (req, res) => {
     const homeId = req.body.home_id;
     if (!isValidObjectId(homeId)) {
         res.status(400).json('Invalid home id!');
+        return;
+    }
+
+    if (!(await getHomeById(homeId))) {
+        res.status(400).json('Home not found!');
+        return;
+    }
+    if (!(await isHomeBelongToOwner(homeId, req.auth_id)) && req.auth_role !== ROLES_ENUMS.Admin) {
+        res.status(403).json('You do not have permission to delete this home!');
         return;
     }
 
@@ -184,6 +208,7 @@ router.put(
         .withMessage(`Description must be at least 5 character long`)
         .isLength({ max: 255 })
         .withMessage(`Description must less 255 character long`),
+    verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]),
     async (req, res) => {
         const homeId = req.body.home_id;
         if (!isValidObjectId(homeId)) {
@@ -196,6 +221,18 @@ router.put(
             res.status(400).json(errors);
             return;
         }
+        if (!(await getHomeById(homeId))) {
+            res.status(400).json('Home not found!');
+            return;
+        }
+        if (
+            !(await isHomeBelongToOwner(homeId, req.auth_id)) &&
+            req.auth_role !== ROLES_ENUMS.Admin
+        ) {
+            res.status(403).json('You do not have permission to delete this home!');
+            return;
+        }
+
         const currentHome = await updateHome(homeId, home);
         return res.status(200).json(currentHome);
     }
