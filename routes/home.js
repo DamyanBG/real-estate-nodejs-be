@@ -27,7 +27,6 @@ const { addPhotoName } = require('../services/homeService');
 const CONTAINER_NAME = process.env.CONTAINER_NAME;
 const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
-
 const reqBodyToObject = (req) => ({
     title: req.body.title,
     city: req.body.city,
@@ -221,10 +220,7 @@ router.put(
             res.status(400).json(errors);
             return;
         }
-        if (!(await getHomeById(homeId))) {
-            res.status(400).json('Home not found!');
-            return;
-        }
+
         if (
             !(await isHomeBelongToOwner(homeId, req.auth_id)) &&
             req.auth_role !== ROLES_ENUMS.Admin

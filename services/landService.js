@@ -10,8 +10,10 @@ async function createLand(land) {
 async function getLandById(landId) {
     const land = await Land.findById(landId);
     if (!land) return null;
+
     const ownerId = land.owner.toString();
     const owner = await User.findById(ownerId);
+    if (!owner) return null;
     const ownerNames = `${owner.first_name} ${owner.last_name}`;
     const landInfo = {
         owner_names: ownerNames,
@@ -46,6 +48,7 @@ async function getAllLands() {
 
 async function isLandBelongToOwner(landId, ownerid) {
     const land = await Land.findById(landId);
+    console.log(land, '===========', landId);
     if (!land) return false;
     return ownerid === land.owner.toString();
 }
