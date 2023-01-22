@@ -1,37 +1,43 @@
 const {
-  model,
-  Schema,
-  Types: { ObjectId },
+    model,
+    Schema,
+    Types: { ObjectId },
 } = require('mongoose');
 const { STATUS_ENUMS } = require('../util/enums');
 
 const meetingsSchema = new Schema(
-  {
-    start_date: {
-      type: String,
-      required: true,
+    {
+        date: {
+            type: Date,
+            required: true,
+        },
+        start_date: {
+            type: Date,
+            required: true,
+        },
+        end_date: {
+            type: Date,
+            required: true,
+        },
+        participants: [
+            {
+                name: {
+                    type: String,
+                    required: true,
+                },
+                email: {
+                    type: String,
+                    required: true,
+                },
+            },
+        ],
+        status: {
+            type: String,
+            required: true,
+            enum: STATUS_ENUMS,
+        },
     },
-    end_date: {
-      type: String,
-      required: true,
-    },
-    invitor_id: {
-      type: ObjectId,
-      required: true,
-      ref: 'User',
-    },
-    invited_id: {
-      type: ObjectId,
-      required: true,
-      ref: 'User',
-    },
-    status: {
-      type: String,
-      required: true,
-      enum: STATUS_ENUMS,
-    },
-  },
-  { timestamps: true }
+    { timestamps: true }
 );
 
 const Meetings = model('Meetings', meetingsSchema);
