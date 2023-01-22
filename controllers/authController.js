@@ -7,6 +7,7 @@ generateToken = async (authInfo) => {
 };
 
 const loginUser = async (req, res) => {
+    console.log('logingggggggggggggggggggggggggggggggggggggggg');
     const { email, password } = req.body;
 
     console.log(email);

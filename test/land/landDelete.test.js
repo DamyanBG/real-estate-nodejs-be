@@ -47,7 +47,6 @@ describe('Positive DELETE /land', () => {
                     expiresIn: '1d',
                 }
             );
-            mockingoose(Land).toReturn(null, 'findOne');
 
             const { statusCode } = await request(app)
                 .delete(`/land`)
