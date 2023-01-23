@@ -19,7 +19,7 @@ jobs:
 
       - name: npm install and build
         env:
-          JWT_KEY: ${{ secrets.JWT_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_KEY }}
 
         run: |
           npm install
