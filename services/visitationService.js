@@ -11,15 +11,15 @@ async function getvisitationById(visitationId) {
 }
 
 async function deletedVisitation(visitationId) {
-    const visitation = await Visitation.findByIdAndDelete(visitationId);   
-    await visitation.save();
+    await Visitation.findByIdAndDelete(visitationId);   
 }
 
 async function updateVisitation(visitationId, visitation) {
     const existing = await Visitation.findById(visitationId);
 
-    existing.start_date = visitation.start_date;
-    existing.end_date = visitation.end_date;
+    existing.start_hour = visitation.start_hour;
+    existing.end_hour = visitation.end_hour;
+    existing.date = visitation.date
     existing.address = visitation.address;
 
     await existing.save();
