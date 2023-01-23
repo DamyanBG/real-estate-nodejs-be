@@ -18,6 +18,9 @@ jobs:
           node-version: '18.x'
 
       - name: npm install and build
+        env:
+          JWT_KEY: ${{ secrets.JWT_KEY }}
+
         run: |
           npm install
           npm install -g nodemon
