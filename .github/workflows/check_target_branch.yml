@@ -1,0 +1,33 @@
+name: PR validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check pushed branch
+      id: check_branch
+      run: |
+        if [ "$GITHUB_HEAD_REF" != "development" ]; then
+          echo "Target branch have to be development!"
+          exit 1
+        fi
+    - name: Add comment on PR
+      if: failure()
+      run: |
+        COMMENT="Target branch have to be development!"
+        PR_NUMBER=${{ github.event.number }}
+        REPO_FULLNAME=${{ github.event.repository.full_name }}
+        curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{\"body\":\"$COMMENT\"}" "https://api.github.com/repos/$REPO_FULLNAME/issues/$PR_NUMBER/comments"
+        
+    - name: Close PR
+      if: failure()
+      run: |
+        PR_NUMBER=${{ github.event.number }}
+        REPO_FULLNAME=${{ github.event.repository.full_name }}
+        curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X PATCH -d "{\"state\":\"closed\"}" "https://api.github.com/repos/$REPO_FULLNAME/pulls/$PR_NUMBER"
