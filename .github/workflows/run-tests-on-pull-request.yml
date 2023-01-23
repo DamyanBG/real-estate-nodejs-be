@@ -27,5 +27,7 @@ jobs:
           npm run build --if-present
 
       - name: Run tests
+        env:
+          JWT_SECRET: ${{ secrets.JWT_KEY }}
         run: npm test
 
