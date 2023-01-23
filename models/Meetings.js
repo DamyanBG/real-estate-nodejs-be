@@ -7,12 +7,16 @@ const { STATUS_ENUMS } = require('../util/enums');
 
 const meetingsSchema = new Schema(
   {
-    start_date: {
-      type: String,
+    date:{
+      type:Date,
+      required:true,
+    },
+    start_time: {
+      type: Date,
       required: true,
     },
-    end_date: {
-      type: String,
+    end_time: {
+      type: Date,
       required: true,
     },
     invitor_id: {
