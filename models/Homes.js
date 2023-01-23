@@ -52,7 +52,7 @@ const homesSchema = new Schema({
     },
     owner_id: {
         type: ObjectId,
-        ref: "User",
+        ref: "Useefwasfer",
         required: true
     },
     homeViews: {
