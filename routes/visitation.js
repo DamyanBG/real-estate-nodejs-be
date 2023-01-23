@@ -9,10 +9,13 @@ const { isValidObjectId } = require("mongoose");
 const router = require("express").Router();
 
 const reqBodyToObject = (req) => ({
-  start_date: req.body.start_date,
-  end_date: req.body.end_date,
+  start_hour: req.body.start_hour,
+  end_hour: req.body.end_hour,
+  date: req.body.date,
   address: req.body.address,
   organizator_id: req.body.organizator_id,
+  home_id: req.body.home_id,
+  land_id: req.body.land_id,
 });
 
 router.post("/", async (req, res) => {
@@ -20,6 +23,11 @@ router.post("/", async (req, res) => {
 
   if (!isValidObjectId(visitationInfo.organizator_id)) {
     res.status(400).json("Invalid organizator id!");
+    return;
+  }
+
+  if (!isValidObjectId(visitationInfo.home_id) && !isValidObjectId(visitationInfo.land_id)) {
+    res.status(400).json("Invalid property id!");
     return;
   }
 
