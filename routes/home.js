@@ -11,6 +11,7 @@ const {
     updateHome,
     isHomeBelongToOwner,
 } = require('../services/homeService');
+const { queryVisitationsByHomeId } = require('../services/visitationService')
 const { body, validationResult } = require('express-validator');
 
 const verifyToken = require('../middlewares/verifyToken');
@@ -64,7 +65,12 @@ router.get('/:home_id', async (req, res) => {
         ...homeInfo,
     };
 
-    res.status(200).json(homeResponse);
+    const visitations = await queryVisitationsByHomeId(homeId)
+
+    res.status(200).json({
+        homeInfo: homeResponse,
+        visitations: visitations
+    });
     return;
 });
 

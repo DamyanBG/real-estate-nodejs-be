@@ -26,9 +26,21 @@ async function updateVisitation(visitationId, visitation) {
     return existing;
 }
 
+async function queryVisitationsByLandId(landId) {
+    const visitations = await Visitation.find({ land_id: landId })
+    return visitations
+}
+
+async function queryVisitationsByHomeId(homeId) {
+    const visitations = await Visitation.find({ home_id: homeId })
+    return visitations
+}
+
 module.exports = {
     getvisitationById,
     createVisitation,
     deletedVisitation,
-    updateVisitation
+    updateVisitation,
+    queryVisitationsByLandId,
+    queryVisitationsByHomeId,
 }

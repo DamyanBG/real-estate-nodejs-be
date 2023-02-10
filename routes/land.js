@@ -8,6 +8,7 @@ const {
     updateLand,
     isLandBelongToOwner,
 } = require('../services/landService');
+const { queryVisitationsByLandId } = require('../services/visitationService')
 const verifyToken = require('../middlewares/verifyToken');
 const verifyRole = require('../middlewares/verifyRole');
 const { ROLES_ENUMS } = require('../util/enums');
@@ -34,7 +35,11 @@ router.get('/:land_id', async (req, res) => {
         res.status(404).send('Land with this id do not exists');
         return;
     }
-    res.status(200).json(land);
+    const visitations = await queryVisitationsByLandId(land._id)
+    res.status(200).json({
+        landInfo: land,
+        visitations: visitations
+    });
     return;
 });
 
