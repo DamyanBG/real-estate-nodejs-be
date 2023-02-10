@@ -3,6 +3,7 @@ const {
   getvisitationById,
   deletedVisitation,
   updateVisitation,
+  queryVisitationsByLandId,
 } = require("../services/visitationService");
 const { isValidObjectId } = require("mongoose");
 
@@ -83,5 +84,18 @@ router.put("/", async (req, res) => {
   const newVisitation = await updateVisitation(visitationId, visitationInfo);
   return res.status(200).json(newVisitation);
 });
+
+router.get("/land/:landId", async (req, res) => {
+  const landId = req.params.landId;
+  if (!isValidObjectId(landId)) {
+    res.status(400).json("Invalid land id!");
+    return;
+  }
+
+  const visitations = await queryVisitationsByLandId(landId);
+  res.status(200).json(visitations);
+  return;
+});
+
 
 module.exports = router;
