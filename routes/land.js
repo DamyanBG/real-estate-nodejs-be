@@ -73,20 +73,18 @@ router.post(
         }
         const landInfo = reqBodyToObject(req);
 
-        if (landInfo.owner) {
-            if (!isValidObjectId(landInfo.owner)) {
-                res.status(400).json('Invalid owner id!');
-                return;
-            }
+        
+        if (!isValidObjectId(landInfo.owner)) {
+            res.status(400).json('Invalid owner id!');
+            return;
         }
-
+        
         const newLand = await createLand(landInfo);
         return res.status(201).json(newLand);
     }
 );
 
 router.delete('/', verifyRole([ROLES_ENUMS.Admin, ROLES_ENUMS.Seller]), async (req, res) => {
-    // Land Id
     const landId = req.body.land_id;
     if (!isValidObjectId(landId)) {
         res.status(400).json('Invalid land id!');
